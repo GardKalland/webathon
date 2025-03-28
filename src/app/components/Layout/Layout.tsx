@@ -4,13 +4,8 @@ import { FC } from 'react';
 import { Box } from '@mui/material';
 import { LayoutProps } from './Layout.types';
 import { Header } from '../Header';
+import {Footer} from "@/app/components/Footer";
 
-// Note: We'll create a simple Footer placeholder since we haven't defined it yet
-const Footer = () => (
-    <Box component="footer" sx={{ py: 4, textAlign: 'center' }}>
-        © {new Date().getFullYear()} Your Company Name
-    </Box>
-);
 
 export const Layout: FC<LayoutProps> = ({
                                             children,
