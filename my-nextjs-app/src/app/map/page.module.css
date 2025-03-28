@@ -156,6 +156,7 @@
 .popup h3 {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  color: #E10600; /* F1 red */
 }
 
 .popup p {
