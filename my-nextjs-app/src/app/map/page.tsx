@@ -1,7 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { Box, Container } from '@mui/material';
+import { F1Header } from '@/app/components/Header/F1Header';
+import { Footer } from '@/app/components/Footer/Footer';
 import styles from './page.module.css';
 
 // Define the race location type
@@ -14,6 +17,17 @@ interface RaceLocation {
   lat: number;
   lng: number;
   status: 'completed' | 'upcoming';
+}
+
+// API response type
+interface Session {
+  session_key: number;
+  country_name: string;
+  circuit_short_name: string;
+  session_name: string;
+  date_start: string;
+  location_lat?: number;
+  location_long?: number;
 }
 
 // Load the map component with no SSR
@@ -29,10 +43,33 @@ const MapComponent = dynamic(() => import('./MapComponent'), {
 export default function MapPage() {
   const [selectedSeason, setSelectedSeason] = useState<string>('2025');
   const [selectedRace, setSelectedRace] = useState<RaceLocation | null>(null);
+  const [apiSessions, setApiSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
-  // This data would normally come from OpenF1 API
-  // Note: We're using hardcoded data here since the actual API integration 
-  // will be handled by another team member
+  // Fetch API data
+  useEffect(() => {
+    const fetchSessions = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch('/api/f1');
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        
+        console.log('Sessions from API:', data);
+        setApiSessions(data);
+      } catch (err: any) {
+        console.error(err);
+        setError('Failed to load sessions from API');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSessions();
+  }, []);
+  
+  // Static data for other seasons and as fallback
   const seasons = ['2021', '2022', '2023', '2024', '2025'];
   
   const raceLocations: Record<string, RaceLocation[]> = {
@@ -346,65 +383,93 @@ export default function MapPage() {
     '2021': []
   };
 
+  // Process API sessions to merge with static data
+  useEffect(() => {
+    if (apiSessions.length > 0) {
+      console.log('Processing API sessions for UI');
+      // In a real implementation, we would merge the API data with our static data
+      // or replace entirely, depending on requirements
+    }
+  }, [apiSessions]);
+
   const handleRaceCardClick = (race: RaceLocation) => {
     setSelectedRace(race);
   };
 
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>F1 Race Calendar</h1>
-      
-      <div className={styles.filterContainer}>
-        <label htmlFor="season-select">Select Season:</label>
-        <select 
-          id="season-select"
-          className={styles.seasonSelect}
-          value={selectedSeason}
-          onChange={(e) => setSelectedSeason(e.target.value)}
-        >
-          {seasons.map(season => (
-            <option key={season} value={season}>{season}</option>
-          ))}
-        </select>
-      </div>
+  const navItems = [
+    { label: 'Home', href: '/' },
+    { label: 'Teams', href: '/teams' },
+    { label: 'Drivers', href: '/drivers' },
+    { label: 'Calendar', href: '/map', isActive: true },
+    { label: 'Results', href: '/results' },
+  ];
 
-      <div className={styles.mapContainer}>
-        <MapComponent 
-          races={raceLocations[selectedSeason] || []}
-          selectedRace={selectedRace}
-        />
-      </div>
-      
-      <h2 className={styles.racesTitle}>Race Locations</h2>
-      
-      <div className={styles.raceGrid}>
-        {raceLocations[selectedSeason]?.map(race => (
-          <div 
-            key={race.id} 
-            className={`${styles.raceCard} ${selectedRace === race ? styles.selectedCard : ''}`}
-            onClick={() => handleRaceCardClick(race)}
-          >
-            <h2>{race.country}</h2>
-            <h3>{race.city}</h3>
-            <p className={styles.circuit}>{race.circuit}</p>
-            <p className={styles.date}>
-              {new Date(race.date).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
-            </p>
-            <p className={`${styles.status} ${styles[race.status]}`}>
-              {race.status === 'upcoming' ? 'Upcoming' : 'Completed'}
-            </p>
-            <button className={styles.detailsButton}>View Details</button>
+  return (
+    <>
+      <F1Header navItems={navItems} />
+      <Box sx={{ pt: 12, pb: 8 }}>
+        <Container maxWidth="xl">
+          <div className={styles.container}>
+            <h1 className={styles.title}>F1 Race Calendar</h1>
+            
+            <div className={styles.filterContainer}>
+              <label htmlFor="season-select">Select Season:</label>
+              <select 
+                id="season-select"
+                className={styles.seasonSelect}
+                value={selectedSeason}
+                onChange={(e) => setSelectedSeason(e.target.value)}
+              >
+                {seasons.map(season => (
+                  <option key={season} value={season}>{season}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.mapContainer}>
+              <MapComponent 
+                races={raceLocations[selectedSeason] || []}
+                selectedRace={selectedRace}
+              />
+            </div>
+            
+            <h2 className={styles.racesTitle}>Race Locations</h2>
+            
+            {loading && <p className={styles.loading}>Loading race data...</p>}
+            {error && <p className={styles.error}>{error}</p>}
+            
+            <div className={styles.raceGrid}>
+              {raceLocations[selectedSeason]?.map(race => (
+                <div 
+                  key={race.id} 
+                  className={`${styles.raceCard} ${selectedRace === race ? styles.selectedCard : ''}`}
+                  onClick={() => handleRaceCardClick(race)}
+                >
+                  <h2>{race.country}</h2>
+                  <h3>{race.city}</h3>
+                  <p className={styles.circuit}>{race.circuit}</p>
+                  <p className={styles.date}>
+                    {new Date(race.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </p>
+                  <p className={`${styles.status} ${styles[race.status]}`}>
+                    {race.status === 'upcoming' ? 'Upcoming' : 'Completed'}
+                  </p>
+                  <button className={styles.detailsButton}>View Details</button>
+                </div>
+              ))}
+              
+              {raceLocations[selectedSeason]?.length === 0 && (
+                <p className={styles.noData}>No race data available for this season.</p>
+              )}
+            </div>
           </div>
-        ))}
-        
-        {raceLocations[selectedSeason]?.length === 0 && (
-          <p className={styles.noData}>No race data available for this season.</p>
-        )}
-      </div>
-    </div>
+        </Container>
+      </Box>
+      <Footer />
+    </>
   );
 }
