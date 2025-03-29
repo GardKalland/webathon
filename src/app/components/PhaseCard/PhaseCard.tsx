@@ -22,16 +22,18 @@ export const PhaseCard: React.FC<PhaseCardProps> = ({
                                                         description,
                                                         icon,
                                                         color,
+                                                        height = "100%",
                                                         link,
                                                         hoveredCard,
                                                         setHoveredCard,
                                                         compact = false // Default to standard size
+
                                                     }) => {
     return (
         <Link href={link} passHref style={{ textDecoration: 'none' }}>
             <Card
                 sx={{
-                    height: '100%',
+                    height: {height},
                     cursor: 'pointer',
                     position: 'relative',
                     overflow: 'hidden',

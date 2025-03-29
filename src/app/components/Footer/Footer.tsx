@@ -214,6 +214,7 @@ export const Footer: FC<FooterProps> = ({
                         <Grid container spacing={2}>
                             {partners.map((partner) => (
                                     <MuiLink
+                                        key={partner.name}
                                         component={Link} href={partner.externalhref}
                                         sx={{
                                             color: 'rgba(255,255,255,0.7)',
