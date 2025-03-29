@@ -257,14 +257,25 @@ export default function MapPageContent({
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Container maxWidth="xl">
-        <div className={styles.container}>
+      <Container 
+        maxWidth="xl"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        <Box sx={{ width: '100%', maxWidth: '1200px' }}>
           {sectionTitle && (
             <Typography 
               variant="h3" 
               component="h1" 
-              className={styles.title}
-              sx={{ textAlign: 'center', mb: 3 }}
+              sx={{ 
+                textAlign: 'center', 
+                mb: 3,
+                color: '#E10600',
+                fontWeight: 700
+              }}
             >
               {sectionTitle}
             </Typography>
@@ -287,85 +298,182 @@ export default function MapPageContent({
             </div>
           )}
 
-          <div className={`${styles.mapContainer} ${fullHeight ? styles.mapContainerFull : ''}`}>
+          <Box 
+            id="map-wrapper" 
+            sx={{ 
+              width: "100%", 
+              height: fullHeight ? "600px" : "500px",
+              display: "flex",
+              flexDirection: "column",
+              position: "relative",
+              border: "1px solid rgba(0,0,0,0.1)",
+              borderRadius: "8px",
+              overflow: "hidden",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              mb: 4
+            }}
+          >
             {loading && !raceLocations[selectedYear] ? (
-              <div className={styles.mapPlaceholder}>
+              <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center", 
+                height: "100%",
+                width: "100%",
+                bgcolor: "#f5f5f5"
+              }}>
                 <CircularProgress />
-                <p>Loading race locations...</p>
-              </div>
+                <Typography sx={{ mt: 2 }}>Loading race locations...</Typography>
+              </Box>
             ) : (
               <MapComponent 
                 races={raceLocations[selectedYear] || []}
                 selectedRace={selectedRace}
               />
             )}
-          </div>
+          </Box>
           
           {showRacesList && (
-            <>
-              <h2 className={styles.racesTitle}>Race Locations</h2>
+            <Box sx={{ width: '100%', mt: 4 }}>
+              <Typography 
+                variant="h4" 
+                component="h2" 
+                sx={{ 
+                  textAlign: 'center', 
+                  mb: 3,
+                  fontWeight: 600,
+                  borderBottom: '2px solid #E10600',
+                  pb: 1,
+                  maxWidth: 300,
+                  mx: 'auto'
+                }}
+              >
+                Race Locations
+              </Typography>
               
               {loading && !raceLocations[selectedYear] && (
-                <div className={styles.loadingContainer}>
+                <Box sx={{ 
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  p: 4,
+                  gap: 2
+                }}>
                   <CircularProgress size={30} />
-                  <p className={styles.loading}>Loading race data...</p>
-                </div>
+                  <Typography>Loading race data...</Typography>
+                </Box>
               )}
               
               {error && (
-                <div className={styles.error}>
-                  <p>{error}</p>
-                  <button 
-                    className={styles.retryButton} 
-                    onClick={() => {
-                      setError(null);
-                      setRaceLocations(prev => ({...prev, [selectedYear]: undefined}));
-                    }}
-                  >
-                    Retry
-                  </button>
-                </div>
-              )}
-              
-              <div className={styles.raceGrid}>
-                {raceLocations[selectedYear]?.map(race => (
-                  <div 
-                    key={race.id} 
-                    className={`${styles.raceCard} ${selectedRace === race ? styles.selectedCard : ''}`}
-                    onClick={() => handleRaceCardClick(race)}
-                  >
-                    <h2>{race.country !== 'Unknown' ? race.country : race.name?.split(' ')[0] || 'Unknown'}</h2>
-                    <h3>{race.city !== 'Unknown' ? race.city : ''}</h3>
-                    <p className={styles.circuit}>{race.circuit !== 'Unknown Circuit' ? race.circuit : race.name || 'Unknown Circuit'}</p>
-                    <p className={styles.date}>
-                      {new Date(race.date).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
-                    </p>
-                    <p className={`${styles.status} ${styles[race.status]}`}>
-                      {race.status === 'upcoming' ? 'Upcoming' : 'Completed'}
-                    </p>
-                    <button 
-                      className={styles.detailsButton}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleViewDetails(race);
+                <Alert 
+                  severity="error" 
+                  sx={{ 
+                    maxWidth: 600,
+                    mx: 'auto',
+                    mb: 4 
+                  }}
+                  action={
+                    <Button 
+                      color="error" 
+                      size="small"
+                      onClick={() => {
+                        setError(null);
+                        setRaceLocations(prev => ({...prev, [selectedYear]: undefined}));
                       }}
                     >
-                      View Details
-                    </button>
-                  </div>
+                      Retry
+                    </Button>
+                  }
+                >
+                  {error}
+                </Alert>
+              )}
+              
+              <Grid container spacing={3}>
+                {raceLocations[selectedYear]?.map(race => (
+                  <Grid item xs={12} sm={6} md={4} key={race.id}>
+                    <Card 
+                      elevation={3}
+                      sx={{
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
+                        '&:hover': {
+                          transform: 'translateY(-5px)',
+                          boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+                        },
+                        borderLeft: '4px solid #E10600',
+                        borderColor: selectedRace === race ? '#E10600' : 'transparent',
+                        borderWidth: selectedRace === race ? '4px' : '1px',
+                        borderStyle: 'solid',
+                        bgcolor: selectedRace === race ? 'rgba(225,6,0,0.05)' : 'background.paper'
+                      }}
+                      onClick={() => handleRaceCardClick(race)}
+                    >
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom>
+                          {race.country !== 'Unknown' ? race.country : race.name?.split(' ')[0] || 'Unknown'}
+                        </Typography>
+                        
+                        {race.city !== 'Unknown' && (
+                          <Typography variant="subtitle1" gutterBottom>
+                            {race.city}
+                          </Typography>
+                        )}
+                        
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1 }}>
+                          {race.circuit !== 'Unknown Circuit' ? race.circuit : race.name || 'Unknown Circuit'}
+                        </Typography>
+                        
+                        <Typography variant="body2" sx={{ mb: 1 }}>
+                          {new Date(race.date).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          })}
+                        </Typography>
+                        
+                        <Chip 
+                          size="small"
+                          label={race.status === 'upcoming' ? 'Upcoming' : 'Completed'}
+                          color={race.status === 'upcoming' ? 'primary' : 'error'}
+                          sx={{ mb: 2 }}
+                        />
+                        
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          fullWidth
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewDetails(race);
+                          }}
+                        >
+                          View Details
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
                 ))}
                 
                 {raceLocations[selectedYear]?.length === 0 && !loading && (
-                  <p className={styles.noData}>No race data available for {selectedYear}.</p>
+                  <Grid item xs={12}>
+                    <Box sx={{ 
+                      textAlign: 'center',
+                      py: 4,
+                      opacity: 0.7
+                    }}>
+                      <Typography variant="h6">
+                        No race data available for {selectedYear}.
+                      </Typography>
+                    </Box>
+                  </Grid>
                 )}
-              </div>
-            </>
+              </Grid>
+            </Box>
           )}
-        </div>
+        </Box>
       </Container>
     </Box>
   );

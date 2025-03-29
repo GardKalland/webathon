@@ -21,6 +21,8 @@ interface MapComponentProps {
 }
 
 export default function MapComponent({ races, selectedRace }: MapComponentProps) {
+  // Add an extra ref to manually track if the map has been initialized
+  const isMapInitialized = useRef<boolean>(false);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
@@ -30,23 +32,6 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
     // Clear previous markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
-    
-    // Create custom F1-themed markers
-    const completedIcon = new L.Icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/3085/3085336.png', // Checkered flag
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32],
-      className: 'map-marker completed'
-    });
-    
-    const upcomingIcon = new L.Icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/3097/3097145.png', // Racing flag
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32],
-      className: 'map-marker upcoming'
-    });
     
     // Create custom marker divIcon function
     const createCircleMarker = (race: RaceLocation) => {
@@ -108,51 +93,93 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
     });
   };
 
-  // Initialize map on mount
-  useEffect(() => {
-    // Only import and initialize Leaflet on the client-side
-    if (typeof window !== 'undefined') {
-      // Using a dynamic import for Leaflet
-      Promise.all([
-        import('leaflet'),
-        import('leaflet/dist/leaflet.css')
-      ]).then(([L]) => {
-        // Clean up previous map instance if it exists
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.remove();
-        }
-
-        // Create new map with a wider view and zoom constraints
-        const map = L.default.map(mapRef.current!, {
-          minZoom: 2,  // Prevent zooming out too far
-          maxBounds: [[-90, -180], [90, 180]],  // Restrict panning to world bounds
-          maxBoundsViscosity: 1.0,  // Make bounds "hard" - can't go beyond them
-          worldCopyJump: true  // Enables seamless horizontal panning
-        }).setView([25, 10], 2);
-        
-        // Add a simpler, less detailed tile layer
-        L.default.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          subdomains: 'abcd',
-          maxZoom: 12,  // Limit maximum zoom level
-          noWrap: true  // Prevents multiple copies of the world from showing
-        }).addTo(map);
-        
-        // Save map instance to ref for later use
-        mapInstanceRef.current = map;
-        
-        // Add initial markers right after map initialization
-        if (races.length > 0) {
-          addMarkersToMap(L.default, races);
-        }
-      });
-    }
-    
-    // Cleanup on unmount
-    return () => {
+  // Function to initialize the map - separate from useEffect to make it cleaner
+  const initializeMap = async () => {
+    try {
+      // Manually import Leaflet
+      const L = (await import('leaflet')).default;
+      
+      // Import the CSS manually since we're in a client component
+      await import('leaflet/dist/leaflet.css');
+      
+      // Validate the map container
+      if (!mapRef.current) {
+        console.error('Map container element not found!');
+        return;
+      }
+      
+      // Explicitly set dimensions to ensure the container is visible
+      mapRef.current.style.width = '100%';
+      mapRef.current.style.height = '100%';
+      mapRef.current.style.minHeight = '400px';
+      
+      // Clean up any existing map instance
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
+      }
+      
+      // Create a new map instance with error handling
+      const mapOptions = {
+        minZoom: 2,
+        maxBounds: [[-90, -180], [90, 180]],
+        maxBoundsViscosity: 1.0,
+        worldCopyJump: true
+      };
+      
+      console.log('Creating map with container:', mapRef.current);
+      const map = L.map(mapRef.current, mapOptions).setView([25, 10], 2);
+      
+      // Add the tile layer
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: 'abcd',
+        maxZoom: 12,
+        noWrap: true
+      }).addTo(map);
+      
+      // Store the map instance and mark as initialized
+      mapInstanceRef.current = map;
+      isMapInitialized.current = true;
+      
+      // Add markers if we have them
+      if (races && races.length > 0) {
+        addMarkersToMap(L, races);
+      }
+      
+      // Force a resize after a short delay to fix any sizing issues
+      setTimeout(() => {
+        if (map) map.invalidateSize();
+      }, 300);
+      
+      console.log('Map initialized successfully');
+    } catch (error) {
+      console.error('Error initializing map:', error);
+    }
+  };
+  
+  // Initialize map on mount - with a delay to ensure DOM is ready
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return; // Skip on server
+    }
+    
+    // Use setTimeout to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      if (!isMapInitialized.current) {
+        initializeMap();
+      }
+    }, 500);
+    
+    return () => {
+      clearTimeout(timer);
+      if (mapInstanceRef.current) {
+        try {
+          mapInstanceRef.current.remove();
+          mapInstanceRef.current = null;
+          isMapInitialized.current = false;
+        } catch (e) {
+          console.error('Error cleaning up map:', e);
+        }
       }
     };
   }, []);
@@ -170,7 +197,6 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
     }
 
     console.log(`Adding ${races.length} race markers to map`);
-    console.log('First race data:', races[0]);
     
     // Check for valid coordinates
     const validRaces = races.filter(race => 
@@ -196,7 +222,7 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
     if (!mapInstanceRef.current || !selectedRace) return;
     
     import('leaflet').then(() => {
-      // Fly to the selected race with an appropriate zoom level (not too close)
+      // Fly to the selected race with an appropriate zoom level
       mapInstanceRef.current.flyTo([selectedRace.lat, selectedRace.lng], 7, {
         animate: true,
         duration: 1
@@ -213,43 +239,14 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
   }, [selectedRace]);
 
   return (
-    <>
-      {/* Add custom styles for map elements */}
-      <style jsx global>{`
-        /* Custom marker styles */
-        .custom-div-icon.completed {
-          filter: drop-shadow(0 0 5px rgba(225, 6, 0, 0.5));
-        }
-
-        .custom-div-icon.upcoming {
-          filter: drop-shadow(0 0 5px rgba(0, 64, 255, 0.5));
-        }
-
-        /* Popup styles */
-        .leaflet-popup-content-wrapper {
-          border-radius: 8px;
-          padding: 0;
-          overflow: hidden;
-          box-shadow: 0 3px 14px rgba(0,0,0,0.2);
-        }
-
-        .leaflet-popup-content {
-          margin: 0;
-          padding: 10px;
-          line-height: 1.5;
-        }
-
-        .leaflet-popup-tip {
-          background-color: white;
-        }
-
-        /* Add hover effect to markers */
-        .custom-div-icon:hover {
-          transform: scale(1.2);
-          transition: transform 0.2s;
-        }
-      `}</style>
-      <div ref={mapRef} className={styles.mapContainer} />
-    </>
+    <div 
+      ref={mapRef} 
+      className={styles.mapContainer} 
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative'
+      }}
+    />
   );
 }
