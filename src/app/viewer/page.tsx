@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+
 import {
   Container,
   Grid,
@@ -49,15 +50,6 @@ interface Driver {
   speed: number;
   image?: string;
   dnf: boolean;
-  phaseCard?: {
-    id: number;
-    title: string;
-    subtitle: string;
-    description: string;
-    image?: string;
-    color: string;
-    link: string;
-  };
 }
 
 interface RaceIncident {
@@ -82,87 +74,94 @@ interface RaceData {
   timestamp: string;
   drivers: Driver[];
   incidents: RaceIncident[];
-  session_status: string;
 }
 
-export default function DriverDataPage() {
+export default function RaceViewerPage() {
   const [raceData, setRaceData] = useState<RaceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [autoAdvance, setAutoAdvance] = useState(false);
   const theme = useTheme();
 
   // Fetch race data from the API
-  const fetchRaceData = async () => {
+  const fetchRaceData = async (advanceLaps = 1) => {
     try {
       setLoading(true);
-      let sessionKey = "9999"; // Default session key
+      const response = await fetch(`/api/simulation?laps=${advanceLaps}`);
 
-      try {
-        // Try to get the most recent session
-        const sessionsRes = await fetch('/api/sessions');
-        const sessions = await sessionsRes.json();
-        if (sessions.data && sessions.data.length > 0) {
-          sessionKey = sessions.data[0]?.session_key || sessionKey;
-        }
-      } catch (err) {
-        console.log('Failed to fetch sessions, using default session key');
-      }
-
-      const response = await fetch(`/api/realtime?session_key=${sessionKey}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch race data: ${response.status}`);
       }
 
       const data = await response.json();
+
       if (data.error) {
         throw new Error(data.error);
       }
 
       setRaceData(data);
-      setError(null);
+      setLoading(false);
     } catch (err) {
       console.error('Failed to fetch race data:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load race data');
-    } finally {
+      setError(`Failed to load race data: ${err instanceof Error ? err.message : 'Unknown error'}`);
       setLoading(false);
     }
   };
 
-  // Auto-refresh effect
+  // Reset the race
+  const resetRace = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/simulation?reset=true');
+
+      if (!response.ok) {
+        throw new Error(`Failed to reset race: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setRaceData(data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to reset race:', err);
+      setError(`Failed to reset race: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setLoading(false);
+    }
+  };
+
+  // Auto-advance the race
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
 
-    if (autoRefresh && !loading) {
+    if (autoAdvance && raceData && !raceData.race_finished) {
       intervalId = setInterval(() => {
-        fetchRaceData();
-      }, 5000); // Refresh every 5 seconds
+        fetchRaceData(1);
+      }, 5000); // Advance every 5 seconds
     }
 
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [autoRefresh, loading]);
+  }, [autoAdvance, raceData?.race_finished]);
 
   // Initial data load
   useEffect(() => {
-    fetchRaceData();
+    fetchRaceData(0); // Initial fetch without advancing laps
   }, []);
 
   // Get team colors for each driver
   const getTeamColor = (teamName: string) => {
     const teamColors: { [key: string]: string } = {
-      'Red Bull Racing': '#3671C6',
-      'Mercedes': '#6CD3BF',
-      'Ferrari': '#F91536',
+      'Red Bull Racing': '#0600EF',
+      'Mercedes': '#00D2BE',
+      'Ferrari': '#DC0000',
       'McLaren': '#FF8700',
-      'Aston Martin': '#358C75',
-      'Alpine': '#2293D1',
-      'Williams': '#37BEDD',
-      'AlphaTauri': '#5E8FAA',
-      'Alfa Romeo': '#C92D4B',
-      'Haas F1 Team': '#B6BABD'
+      'Aston Martin': '#006F62',
+      'Alpine': '#0090FF',
+      'Williams': '#005AFF',
+      'AlphaTauri': '#2B4562',
+      'Alfa Romeo': '#900000',
+      'Haas F1 Team': '#FFFFFF'
     };
 
     return teamColors[teamName] || theme.palette.primary.main;
@@ -170,12 +169,12 @@ export default function DriverDataPage() {
 
   // Get tire compound color
   const getTireColor = (compound: string) => {
-    switch (compound.toLowerCase()) {
-      case 'soft': return '#FF0000';
-      case 'medium': return '#FFCC00';
-      case 'hard': return '#FFFFFF';
-      case 'intermediate': return '#00FF00';
-      case 'wet': return '#0000FF';
+    switch (compound) {
+      case 'Soft': return '#FF0000';
+      case 'Medium': return '#FFCC00';
+      case 'Hard': return '#FFFFFF';
+      case 'Intermediate': return '#00FF00';
+      case 'Wet': return '#0000FF';
       default: return '#CCCCCC';
     }
   };
@@ -194,6 +193,7 @@ export default function DriverDataPage() {
       return <Chip size="small" label="PIT" sx={{ bgcolor: 'info.main', color: 'white' }} />;
     }
 
+    // Check if driver is in a yellow flag sector
     const inYellowSector = raceData?.yellow_flag_sectors.includes(driver.current_sector);
     if (inYellowSector) {
       return <Chip size="small" label="YEL" sx={{ bgcolor: 'warning.main', color: 'black' }} />;
@@ -202,6 +202,7 @@ export default function DriverDataPage() {
     return null;
   };
 
+  // Loading state
   if (loading && !raceData) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -210,6 +211,7 @@ export default function DriverDataPage() {
     );
   }
 
+  // Error state
   if (error && !raceData) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -218,6 +220,7 @@ export default function DriverDataPage() {
     );
   }
 
+  // No data state
   if (!raceData) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -249,7 +252,7 @@ export default function DriverDataPage() {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <FlagIcon sx={{ mr: 1 }} />
               <Typography>
-                Race Progress: {raceData.race_completion}
+                Race Progress: {raceData.race_completion}%
               </Typography>
             </Box>
           </Box>
@@ -268,21 +271,29 @@ export default function DriverDataPage() {
             <Box sx={{ display: 'flex', gap: 2 }}>
               <Button
                 variant="contained"
-                onClick={() => fetchRaceData()}
-                disabled={loading}
+                onClick={() => fetchRaceData(1)}
+                disabled={raceData.race_finished || loading}
                 startIcon={<KeyboardArrowRightIcon />}
               >
-                Refresh
+                Next Lap
               </Button>
               <Button
                 variant="outlined"
-                onClick={() => setAutoRefresh(!autoRefresh)}
-                disabled={loading}
-                color={autoRefresh ? "error" : "primary"}
+                onClick={() => setAutoAdvance(!autoAdvance)}
+                disabled={raceData.race_finished || loading}
+                color={autoAdvance ? "error" : "primary"}
               >
-                {autoRefresh ? "Stop Auto-Refresh" : "Auto-Refresh"}
+                {autoAdvance ? "Stop Auto" : "Auto Play"}
               </Button>
             </Box>
+            <Button
+              variant="outlined"
+              color="warning"
+              onClick={resetRace}
+              disabled={loading}
+            >
+              Reset Race
+            </Button>
           </Box>
 
           {/* Special Race Conditions */}
@@ -301,9 +312,16 @@ export default function DriverDataPage() {
             </Alert>
           )}
 
+          {raceData.race_finished && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              <AlertTitle>Race Complete</AlertTitle>
+              The race has finished! {raceData.drivers[0]?.name} is the winner!
+            </Alert>
+          )}
+
           {/* Top 3 Drivers */}
           <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-            Current Positions
+            Current Podium
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
             {raceData.drivers.slice(0, 3).map((driver, index) => (
@@ -351,13 +369,14 @@ export default function DriverDataPage() {
                 mb: 1,
                 bgcolor: 'rgba(0,0,0,0.3)',
                 borderRadius: 1,
-                borderLeft: `4px solid ${
-                  incident.type === 'Safety Car' ? 'orange' :
-                  incident.type === 'Yellow Flag' ? 'yellow' :
-                  incident.type === 'Pit Stop' ? 'cyan' :
-                  incident.type === 'Fastest Lap' ? 'lime' :
-                  'white'
-                }`
+                borderLeft: `4px solid ${incident.type === 'Safety Car' ? 'orange' :
+                    incident.type === 'Yellow Flag' ? 'yellow' :
+                      incident.type === 'Pit Stop' ? 'cyan' :
+                        incident.type === 'Fastest Lap' ? 'lime' :
+                          incident.type === 'Race Start' ? 'green' :
+                            incident.type === 'Race Finish' ? 'gold' :
+                              'white'
+                  }`
               }}>
                 <ListItemText
                   primary={
@@ -376,9 +395,9 @@ export default function DriverDataPage() {
                 />
               </ListItem>
             ))}
-            {(!raceData.incidents || raceData.incidents.length === 0) && (
+            {raceData.incidents.length === 0 && (
               <ListItem>
-                <ListItemText primary="No incidents reported" />
+                <ListItemText primary="No incidents yet" />
               </ListItem>
             )}
           </List>
@@ -386,61 +405,72 @@ export default function DriverDataPage() {
       </Box>
 
       {/* Driver Grid */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: {
-        xs: '1fr',
-        sm: 'repeat(2, 1fr)',
-        md: 'repeat(3, 1fr)',
-        lg: 'repeat(4, 1fr)',
-        xl: 'repeat(5, 1fr)'
-      }, gap: 3 }}>
-        {raceData.drivers.map((driver) => (
-          <Box key={driver.driver_number} sx={{ position: 'relative' }}>
-            {/* Status indicator */}
-            {getStatusIndicator(driver) && (
-              <Box sx={{ position: 'absolute', top: -10, right: -10, zIndex: 10 }}>
-                {getStatusIndicator(driver)}
+      <Grid container spacing={2}>
+        {raceData.drivers.map((driver) => {
+          // Generate driver card description with race information
+          const description = `Position: ${driver.position} (Q${driver.qualifying_position})
+Last Lap: ${driver.last_lap_time || 'N/A'}
+Best Lap: ${driver.best_lap_time || 'N/A'}
+Gap to Leader: ${driver.gap_to_leader}
+Interval: ${driver.interval}
+Speed: ${driver.speed} km/h
+Tires: ${driver.tire_compound} (${driver.tire_age.toFixed(0)} laps)
+Pit Stops: ${driver.pit_stops}
+Fuel: ${driver.fuel_load.toFixed(0)}%
+${driver.dnf ? 'Status: DNF' : ''}`;
+
+          // Generate driver card title with position
+          const driverTitle = `P${driver.position} ${driver.name}`;
+
+          return (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={driver.driver_number}>
+              <Box sx={{ position: 'relative' }}>
+                {/* Status indicator */}
+                {getStatusIndicator(driver) && (
+                  <Box sx={{ position: 'absolute', top: -10, right: -10, zIndex: 10 }}>
+                    {getStatusIndicator(driver)}
+                  </Box>
+                )}
+
+                {/* Tire compound indicator */}
+                <Box sx={{
+                  position: 'absolute',
+                  bottom: 10,
+                  right: 10,
+                  zIndex: 10,
+                  width: 30,
+                  height: 30,
+                  borderRadius: '50%',
+                  bgcolor: getTireColor(driver.tire_compound),
+                  border: '2px solid white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '0.75rem',
+                  color: driver.tire_compound === 'Medium' ? 'black' : 'white'
+                }}>
+                  {driver.tire_compound.charAt(0)}
+                </Box>
+
+                <PhaseCard
+                  id={parseInt(driver.driver_number)}
+                  title={driverTitle}
+                  subtitle={driver.team_name}
+                  description={description}
+                  icon={<DirectionsCarIcon />}
+                  color={getTeamColor(driver.team_name)}
+                  link={`/driver/${driver.driver_number}`}
+                  hoveredCard={hoveredCard}
+                  setHoveredCard={setHoveredCard}
+                  image={driver.image}
+                  compact={true}
+                />
               </Box>
-            )}
-
-            {/* Tire compound indicator */}
-            <Box sx={{
-              position: 'absolute',
-              bottom: 10,
-              right: 10,
-              zIndex: 10,
-              width: 30,
-              height: 30,
-              borderRadius: '50%',
-              bgcolor: getTireColor(driver.tire_compound),
-              border: '2px solid white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 'bold',
-              fontSize: '0.75rem',
-              color: driver.tire_compound.toLowerCase() === 'medium' ? 'black' : 'white'
-            }}>
-              {driver.tire_compound.charAt(0)}
-            </Box>
-
-            {driver.phaseCard && (
-              <PhaseCard
-                id={driver.phaseCard.id}
-                title={driver.phaseCard.title}
-                subtitle={driver.phaseCard.subtitle}
-                description={driver.phaseCard.description}
-                color={driver.phaseCard.color}
-                link={driver.phaseCard.link}
-                image={driver.phaseCard.image}
-                hoveredCard={hoveredCard}
-                setHoveredCard={setHoveredCard}
-                icon={<DirectionsCarIcon />}
-                compact={true}
-              />
-            )}
-          </Box>
-        ))}
-      </Box>
+            </Grid>
+          );
+        })}
+      </Grid>
     </Container>
   );
 }
