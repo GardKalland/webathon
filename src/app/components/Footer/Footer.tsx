@@ -160,7 +160,7 @@ export const Footer: FC<FooterProps> = ({
 
                     {/* Footer links */}
                     {footerLinks.map((section, index) => (
-                        <Grid>
+                        <Grid key={index}>
                             <Typography
                                 variant="subtitle1"
                                 sx={{
