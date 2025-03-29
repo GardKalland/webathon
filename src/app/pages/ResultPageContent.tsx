@@ -279,7 +279,7 @@ export default function ResultPageContent({
             {/* Championship Standings Grid */}
             <Grid container spacing={4} sx={{ mb: 8, width: '100%', justifyContent: 'center' }}>
               {/* Driver Championship Standings */}
-              <Grid item xs={12} md={6}>
+              <Grid size={6}>
                 <Paper 
                   elevation={3} 
                   sx={{
@@ -384,7 +384,7 @@ export default function ResultPageContent({
               </Grid>
               
               {/* Constructor Championship Standings */}
-              <Grid item xs={12} md={6}>
+              <Grid size={4}>
                 <Paper 
                   elevation={3} 
                   sx={{
@@ -502,7 +502,7 @@ export default function ResultPageContent({
             
             <Grid container spacing={4} sx={{ width: '100%', justifyContent: 'center' }}>
               {raceResults.map((race) => (
-                <Grid item xs={12} sm={6} md={4} key={race.raceId}>
+                <Grid size={4} key={race.raceId}>
                   <Card 
                     elevation={4} 
                     sx={{
@@ -590,7 +590,7 @@ export default function ResultPageContent({
                       
                       <Grid container spacing={2}>
                         {/* First Place */}
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                           {race.podium.first ? (
                             <PodiumCard 
                               position="first" 
@@ -607,7 +607,7 @@ export default function ResultPageContent({
                         </Grid>
                         
                         {/* Second Place */}
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                           {race.podium.second ? (
                             <PodiumCard 
                               position="second" 
@@ -624,7 +624,7 @@ export default function ResultPageContent({
                         </Grid>
                         
                         {/* Third Place */}
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                           {race.podium.third ? (
                             <PodiumCard 
                               position="third" 
@@ -668,7 +668,7 @@ export default function ResultPageContent({
               ))}
               
               {raceResults.length === 0 && !loading && !error && (
-                <Grid item xs={12}>
+                <Grid size={4}>
                   <Box sx={{ 
                     textAlign: 'center', 
                     py: 6,

@@ -36,29 +36,7 @@ function formatRaceResults(data: any[]) {
       second: null,
       third: null
     };
-    
-    // Extract top 3 positions if available
-    if (race.results && Array.isArray(race.results)) {
-      race.results.forEach(result => {
-        if (result.position === 1) {
-          podium.first = { 
-            driver: result.driver?.name || 'Unknown', 
-            team: result.team?.name || 'Unknown'
-          };
-        } else if (result.position === 2) {
-          podium.second = { 
-            driver: result.driver?.name || 'Unknown', 
-            team: result.team?.name || 'Unknown'
-          };
-        } else if (result.position === 3) {
-          podium.third = { 
-            driver: result.driver?.name || 'Unknown', 
-            team: result.team?.name || 'Unknown'
-          };
-        }
-      });
-    }
-    
+
     return {
       raceId: race.id || 0,
       year: race.season || 0,

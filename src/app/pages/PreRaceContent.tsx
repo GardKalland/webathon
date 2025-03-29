@@ -234,7 +234,7 @@ const PreRaceContent = () => {
                     ) : (
                         <Grid container spacing={3} justifyContent="center" sx={{ maxWidth: 900, mx: 'auto' }}>
                             {weatherData.map((day) => (
-                                <Grid item xs={12} sm={4} key={day.date}>
+                                <Grid size={3} key={day.date}>
                                     <Paper
                                         elevation={3}
                                         sx={{
