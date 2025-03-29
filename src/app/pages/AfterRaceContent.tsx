@@ -16,12 +16,12 @@ import Grid from '@mui/material/Grid';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
-const LandingPageContent = () => {
+const AfterRaceContent = () => {
     const theme = useTheme();
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
     // Data placeholders for landing page sections
-    const landingPageData = [
+    const afterRaceData = [
         {
             id: 1,
             title: 'DRIVER PROFILES',
@@ -101,7 +101,7 @@ const LandingPageContent = () => {
 
                 {/* Cards */}
                 <Grid container justifyContent={'space-evenly'}>
-                    {landingPageData.map((item) => (
+                    {afterRaceData.map((item) => (
                         <Grid key={item.id}>
                             <Card
                                 sx={{
@@ -263,4 +263,4 @@ const LandingPageContent = () => {
     );
 };
 
-export default LandingPageContent;
+export default AfterRaceContent;
