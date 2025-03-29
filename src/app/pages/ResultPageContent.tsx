@@ -29,6 +29,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import FlagIcon from '@mui/icons-material/Flag';
+import PodiumCard from '../components/PodiumCard';
 
 // Define types
 interface DriverStanding {
@@ -79,26 +80,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   color: theme.palette.mode === 'dark' ? '#fff' : '#000',
   fontWeight: 'bold',
 }));
-
-const PodiumCard = styled(Box)(({ theme, position }: { theme: any, position: 'first' | 'second' | 'third' }) => {
-  const colors = {
-    first: { bg: 'rgba(255, 215, 0, 0.15)', border: 'rgba(255, 215, 0, 0.3)' },
-    second: { bg: 'rgba(192, 192, 192, 0.15)', border: 'rgba(192, 192, 192, 0.3)' },
-    third: { bg: 'rgba(205, 127, 50, 0.15)', border: 'rgba(205, 127, 50, 0.3)' }
-  };
-  
-  return {
-    backgroundColor: colors[position].bg,
-    border: `1px solid ${colors[position].border}`,
-    borderRadius: theme.shape.borderRadius,
-    padding: theme.spacing(1.5),
-    textAlign: 'center',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
-  };
-});
 
 export default function ResultPageContent({
   sectionTitle = 'F1 2025 Results & Standings'
@@ -610,146 +591,53 @@ export default function ResultPageContent({
                       <Grid container spacing={2}>
                         {/* First Place */}
                         <Grid item xs={4}>
-                          <Box sx={{
-                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
-                            border: '1px solid rgba(255, 215, 0, 0.2)',
-                            borderRadius: 1,
-                            p: 1.5,
-                            textAlign: 'center',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            position: 'relative',
-                            '&::before': {
-                              content: '"1"',
-                              position: 'absolute',
-                              top: -12,
-                              left: '50%',
-                              transform: 'translateX(-50%)',
-                              bgcolor: 'rgba(255, 215, 0, 0.8)',
-                              color: '#000',
-                              width: 24,
-                              height: 24,
-                              borderRadius: '50%',
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              fontWeight: 'bold',
-                              fontSize: '0.85rem'
-                            }
-                          }}>
-                            {race.podium.first ? (
-                              <>
-                                <Typography variant="body1" sx={{ fontWeight: 700, mb: 0.5 }}>
-                                  {race.podium.first.driver}
-                                </Typography>
-                                <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                                  {race.podium.first.team}
-                                </Typography>
-                              </>
-                            ) : (
-                              <Typography variant="body2" sx={{ opacity: 0.5 }}>
-                                TBD
-                              </Typography>
-                            )}
-                          </Box>
+                          {race.podium.first ? (
+                            <PodiumCard 
+                              position="first" 
+                              driver={race.podium.first.driver} 
+                              team={race.podium.first.team}
+                            />
+                          ) : (
+                            <PodiumCard 
+                              position="first" 
+                              driver="" 
+                              team=""
+                            />
+                          )}
                         </Grid>
                         
                         {/* Second Place */}
                         <Grid item xs={4}>
-                          <Box sx={{
-                            backgroundColor: 'rgba(192, 192, 192, 0.1)',
-                            border: '1px solid rgba(192, 192, 192, 0.2)',
-                            borderRadius: 1,
-                            p: 1.5,
-                            textAlign: 'center',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            position: 'relative',
-                            '&::before': {
-                              content: '"2"',
-                              position: 'absolute',
-                              top: -12,
-                              left: '50%',
-                              transform: 'translateX(-50%)',
-                              bgcolor: 'rgba(192, 192, 192, 0.8)',
-                              color: '#000',
-                              width: 24,
-                              height: 24,
-                              borderRadius: '50%',
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              fontWeight: 'bold',
-                              fontSize: '0.85rem'
-                            }
-                          }}>
-                            {race.podium.second ? (
-                              <>
-                                <Typography variant="body1" sx={{ fontWeight: 700, mb: 0.5 }}>
-                                  {race.podium.second.driver}
-                                </Typography>
-                                <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                                  {race.podium.second.team}
-                                </Typography>
-                              </>
-                            ) : (
-                              <Typography variant="body2" sx={{ opacity: 0.5 }}>
-                                TBD
-                              </Typography>
-                            )}
-                          </Box>
+                          {race.podium.second ? (
+                            <PodiumCard 
+                              position="second" 
+                              driver={race.podium.second.driver} 
+                              team={race.podium.second.team}
+                            />
+                          ) : (
+                            <PodiumCard 
+                              position="second" 
+                              driver="" 
+                              team=""
+                            />
+                          )}
                         </Grid>
                         
                         {/* Third Place */}
                         <Grid item xs={4}>
-                          <Box sx={{
-                            backgroundColor: 'rgba(205, 127, 50, 0.1)',
-                            border: '1px solid rgba(205, 127, 50, 0.2)',
-                            borderRadius: 1,
-                            p: 1.5,
-                            textAlign: 'center',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            position: 'relative',
-                            '&::before': {
-                              content: '"3"',
-                              position: 'absolute',
-                              top: -12,
-                              left: '50%',
-                              transform: 'translateX(-50%)',
-                              bgcolor: 'rgba(205, 127, 50, 0.8)',
-                              color: '#000',
-                              width: 24,
-                              height: 24,
-                              borderRadius: '50%',
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              fontWeight: 'bold',
-                              fontSize: '0.85rem'
-                            }
-                          }}>
-                            {race.podium.third ? (
-                              <>
-                                <Typography variant="body1" sx={{ fontWeight: 700, mb: 0.5 }}>
-                                  {race.podium.third.driver}
-                                </Typography>
-                                <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                                  {race.podium.third.team}
-                                </Typography>
-                              </>
-                            ) : (
-                              <Typography variant="body2" sx={{ opacity: 0.5 }}>
-                                TBD
-                              </Typography>
-                            )}
-                          </Box>
+                          {race.podium.third ? (
+                            <PodiumCard 
+                              position="third" 
+                              driver={race.podium.third.driver} 
+                              team={race.podium.third.team}
+                            />
+                          ) : (
+                            <PodiumCard 
+                              position="third" 
+                              driver="" 
+                              team=""
+                            />
+                          )}
                         </Grid>
                       </Grid>
                     </CardContent>
