@@ -191,7 +191,6 @@ export const PhaseCard: React.FC<PhaseCardProps> = ({
                 py: compact ? 0.5 : 0.75, // Reduced padding
               }}
             >
-<<<<<<< HEAD
                 {/* Card highlight line */}
                 <Box
                     sx={{
@@ -319,13 +318,4 @@ export const PhaseCard: React.FC<PhaseCardProps> = ({
         </Link>
     );
 };
-=======
-              EXPLORE NOW
-            </Button>
-          </Grow>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-};
->>>>>>> 6092aee (we racing g🏎️)
+
