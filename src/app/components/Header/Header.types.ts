@@ -1,5 +1,5 @@
 import { AppBarProps } from '@mui/material';
-import { NavItem } from '../../ui/Navigation/Navigation.types';
+import { NavItem } from '@/app/ui/Navigation';
 
 export interface HeaderProps extends AppBarProps {
     navItems?: NavItem[];

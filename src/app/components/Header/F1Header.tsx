@@ -1,4 +1,5 @@
 // src/components/layout/Header/F1Header.tsx
+// src/components/layout/Header/F1Header.tsx
 'use client';
 
 import { FC, useState, useEffect } from 'react';
@@ -23,30 +24,36 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Typography } from '@/app/ui/Typography';
 import { HeaderProps } from './Header.types';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-interface F1HeaderProps extends HeaderProps {
-    showSpeedometer?: boolean;
-}
-
-export const F1Header: FC<F1HeaderProps> = ({
-                                                navItems = [
-                                                    { label: 'Home', href: '/', isActive: true },
-                                                    { label: 'Standings', href: '/results'},
-                                                    { label: 'Map', href: '/map', },
-                                                    { label: 'Pre-Race', href: '/race-pre' },
-                                                    { label: 'During', href: '/race-during' },
-                                                    { label: 'Post-Race', href: '/race-after' },
-                                                    { label: 'echo pit-stop', href: '/echo' },
-                                                ],
-                                                logoHeight = '40px',
-                                                logoWidth = 'auto',
-                                                logoAlt = 'SMART F1',
-                                                ...props
-                                            }) => {
+export const F1Header: FC<HeaderProps> = ({
+                                              navItems = [
+                                                  { label: 'Home', href: '/'},
+                                                  { label: 'Standings', href: '/results'},
+                                                  { label: 'Map', href: '/map', },
+                                                  { label: 'Pre-Race', href: '/race-pre' },
+                                                  { label: 'During', href: '/race-during' },
+                                                  { label: 'Post-Race', href: '/race-after' },
+                                                  { label: 'echo pit-stop', href: '/about' },
+                                              ],
+                                              logoHeight = '40px',
+                                              logoWidth = 'auto',
+                                              logoAlt = 'SMART F1',
+                                              ...props
+                                          }) => {
     const theme = useTheme();
+    const pathname = usePathname(); // Get current path
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+
+    // Process navItems to mark the active item based on current path
+    const processedNavItems = navItems.map(item => ({
+        ...item,
+        isActive: item.isActive !== undefined
+            ? item.isActive
+            : pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+    }));
 
     // Animation effect for header on scroll
     useEffect(() => {
@@ -133,22 +140,43 @@ export const F1Header: FC<F1HeaderProps> = ({
 
                     {!isMobile && (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {navItems.map((item) => (
+                            {processedNavItems.map((item) => (
                                 <Link href={item.href} key={item.label} passHref style={{ textDecoration: 'none' }}>
                                     <Button
                                         sx={{
                                             mx: 1,
                                             color: 'white',
                                             fontSize: '0.9rem',
-                                            fontWeight: 600,
+                                            fontWeight: item.isActive ? 700 : 600,
                                             opacity: item.isActive ? 1 : 0.7,
                                             '&:hover': {
                                                 opacity: 1,
                                                 backgroundColor: 'rgba(225, 6, 0, 0.1)'
                                             },
-                                            borderBottom: item.isActive ? `2px solid ${theme.palette.primary.main}` : 'none',
+                                            position: 'relative',
                                             borderRadius: 0,
                                             padding: '6px 12px',
+                                            '&::after': item.isActive ? {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '2px',
+                                                backgroundColor: theme.palette.primary.main,
+                                                transform: 'scaleX(1)',
+                                                transition: 'transform 0.3s ease',
+                                            } : {
+                                                content: '""',
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '2px',
+                                                backgroundColor: theme.palette.primary.main,
+                                                transform: 'scaleX(0)',
+                                                transition: 'transform 0.3s ease',
+                                            }
                                         }}
                                     >
                                         {item.label}
@@ -197,21 +225,28 @@ export const F1Header: FC<F1HeaderProps> = ({
                     </Typography>
                     <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)', mb: 2 }} />
                     <List>
-                        {navItems.map((item) => (
+                        {processedNavItems.map((item) => (
                             <Link href={item.href} key={item.label} passHref style={{ textDecoration: 'none', color: 'white' }}>
                                 <ListItem
-                                          sx={{
-                                              borderLeft: item.isActive ? `2px solid ${theme.palette.primary.main}` : 'none',
-                                              pl: item.isActive ? 2 : 3,
-                                              backgroundColor: item.isActive ? 'rgba(225, 6, 0, 0.1)' : 'transparent',
-                                          }}
+                                    sx={{
+                                        borderLeft: item.isActive ? `2px solid ${theme.palette.primary.main}` : 'none',
+                                        pl: item.isActive ? 2 : 3,
+                                        backgroundColor: item.isActive ? 'rgba(225, 6, 0, 0.1)' : 'transparent',
+                                    }}
                                 >
-                                    <ListItemText primary={item.label} />
+                                    <ListItemText
+                                        primary={item.label}
+                                        sx={{
+                                            '& .MuiTypography-root': {
+                                                fontWeight: item.isActive ? 600 : 400,
+                                                color: item.isActive ? 'white' : 'rgba(255,255,255,0.7)',
+                                            }
+                                        }}
+                                    />
                                 </ListItem>
                             </Link>
                         ))}
                     </List>
-
                 </Box>
             </Drawer>
         </AppBar>
