@@ -32,7 +32,7 @@ export const F1Header: FC<F1HeaderProps> = ({
                                                 navItems = [
                                                     { label: 'Home', href: '/', isActive: true },
                                                     { label: 'Map', href: '/map', },
-                                                    { label: 'Pre-Race', href: '/race-before' },
+                                                    { label: 'Pre-Race', href: '/race-pre' },
                                                     { label: 'During', href: '/race-during' },
                                                     { label: 'Post-Race', href: '/race-after' },
                                                     { label: 'echo pit-stop', href: '/echo' },

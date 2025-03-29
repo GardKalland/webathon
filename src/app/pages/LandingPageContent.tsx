@@ -37,7 +37,7 @@ const ThreePhaseLanding = () => {
             description: "Get all the essential information before the lights go out. Team strategies, weather forecasts, qualifying results, and expert predictions.",
             icon: <FlagIcon sx={{ fontSize: 28 }} />,
             color: theme.palette.primary.main,
-            link: "/race-before"
+            link: "/race-pre"
         },
         {
             id: 2,

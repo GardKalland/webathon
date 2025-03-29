@@ -16,35 +16,43 @@ import Grid from '@mui/material/Grid';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
-const AfterRaceContent = () => {
+const PreRaceContent = () => {
     const theme = useTheme();
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
     // Data placeholders for landing page sections
-    const afterRaceData = [
+    const preRaceData = [
         {
             id: 1,
-            title: 'DRIVER PROFILES',
-            description: 'Explore detailed profiles of all F1 drivers, including stats and career highlights.',
-            image: '/post-race-imgs/driver_profiles.jpg',
+            title: 'DRIVER LINEUPS',
+            description: 'Explore the latest driver lineups, team changes, and driver profiles.',
+            image: '/pre-race-imgs/driver_lineups.jpg',
             icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
             color: theme.palette.primary.main
         },
         {
             id: 2,
-            title: 'RACE CALENDAR',
-            description: 'Stay updated with the latest race schedules, track details, and event timings.',
-            image: '/post-race-imgs/race_calendar.jpg',
+            title: 'TRACK ANALYSIS',
+            description: 'Get insights into the track layout, weather conditions, and team strategies.',
+            image: '/pre-race-imgs/track_analysis.jpg',
             icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
             color: '#0090D0'
         },
         {
             id: 3,
-            title: 'STATISTICS & ANALYTICS',
-            description: 'Dive into race statistics, driver performance, and team standings.',
-            image: '/post-race-imgs/analytics_statistics.jpg',
+            title: 'QUALIFYING RESULTS',
+            description: 'Stay updated with the latest qualifying results and grid positions.',
+            image: '/pre-race-imgs/qualifying_results.jpg',
             icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
             color: '#F596C8'
+        },
+        {
+            id: 4,
+            title: 'EXPERT PREDICTIONS',
+            description: 'Get insights from F1 analysts and predictions for the upcoming race weekend.',
+            image: '/pre-race-imgs/expert_predictions.jpg',
+            icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
+            color: '#E10600'
         }
     ];
 
@@ -61,8 +69,8 @@ const AfterRaceContent = () => {
             {/* Header */}
             <Container maxWidth="xl">
                 {/* Cards */}
-                <Grid container justifyContent={'space-evenly'}>
-                    {afterRaceData.map((item) => (
+                <Grid container justifyContent={'space-evenly'} rows={2} spacing={4}>
+                    {preRaceData.map((item) => (
                         <Grid key={item.id}>
                             <Card
                                 sx={{
@@ -181,4 +189,4 @@ const AfterRaceContent = () => {
     );
 };
 
-export default AfterRaceContent;
+export default PreRaceContent;
