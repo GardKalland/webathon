@@ -105,6 +105,7 @@ const LandingPageContent = () => {
                         <Grid key={item.id}>
                             <Card
                                 sx={{
+                                    width: '30vw',
                                     height: '100%',
                                     position: 'relative',
                                     cursor: 'pointer',
