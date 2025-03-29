@@ -35,7 +35,7 @@ const ThreePhaseLanding = () => {
             description: "Get all the essential information before the lights go out. Team strategies, weather forecasts, qualifying results, and expert predictions.",
             icon: <FlagIcon sx={{ fontSize: 28 }} />,
             color: theme.palette.primary.main,
-            link: "/pre-race"
+            link: "/race-before"
         },
         {
             id: 2,
@@ -44,7 +44,7 @@ const ThreePhaseLanding = () => {
             description: "Follow all the action as it happens with live timing, tire strategies, team radio highlights, and real-time race positions.",
             icon: <FlagIcon sx={{ fontSize: 28 }} />,
             color: "#0090D0", // F1 blue
-            link: "/mid-race"
+            link: "/race-during"
         },
         {
             id: 3,
@@ -53,7 +53,7 @@ const ThreePhaseLanding = () => {
             description: "Dive into comprehensive post-race analysis with full results, driver interviews, technical breakdowns, and championship implications.",
             icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />,
             color: "#F596C8", // F1 pink
-            link: "/post-race"
+            link: "/race-after"
         }
     ];
 
