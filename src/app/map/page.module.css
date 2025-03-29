@@ -71,10 +71,39 @@
   color: #333;
 }
 
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
 .error {
   background-color: rgba(255, 0, 0, 0.1);
   color: #E10600;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.retryButton {
+  padding: 0.5rem 1.5rem;
+  background-color: #E10600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #c20500;
 }
 
 .raceGrid {
