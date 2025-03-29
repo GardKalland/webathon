@@ -10,11 +10,13 @@ import {
     CardContent,
     CardMedia,
     useTheme,
-    alpha
+    alpha,
+    Divider
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import ResultPageContent from './ResultPageContent';
 
 const PreRaceContent = () => {
     const theme = useTheme();
@@ -61,20 +63,102 @@ const PreRaceContent = () => {
             sx={{
                 backgroundColor: theme.palette.background.default,
                 minHeight: '100vh',
-                pt: { xs: 16, md: 5 },
-                pb: 10,
+                pt: { xs: 16, md: 8 },
+                pb: 12,
                 position: 'relative',
             }}
         >
-            {/* Header */}
+            {/* Header - Japan Grand Prix */}
             <Container maxWidth="xl">
+                {/* Race Title */}
+                <Box sx={{ 
+                    mb: 6, 
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 3
+                }}>
+                    <Typography 
+                        variant="h2" 
+                        component="h1"
+                        sx={{ 
+                            fontWeight: 800, 
+                            color: '#E10600',
+                            textTransform: 'uppercase',
+                            borderBottom: '4px solid #E10600',
+                            pb: 1,
+                            mb: 2
+                        }}
+                    >
+                        Next Race: Japan Grand Prix
+                    </Typography>
+                    
+                    <Typography 
+                        variant="h5" 
+                        component="h2"
+                        sx={{ 
+                            fontWeight: 500, 
+                            color: 'white',
+                            mb: 3,
+                            opacity: 0.9
+                        }}
+                    >
+                        Suzuka Circuit • 4-6 April, 2025
+                    </Typography>
+                    
+                    {/* Track Image */}
+                    <Box 
+                        sx={{
+                            maxWidth: '800px',
+                            width: '100%',
+                            border: '3px solid rgba(225, 6, 0, 0.6)',
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+                            mb: 3
+                        }}
+                    >
+                        <img 
+                            src="https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Japan_Circuit.png" 
+                            alt="Suzuka Circuit Layout"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                display: 'block'
+                            }}
+                        />
+                    </Box>
+                </Box>
+                
+                {/* Current Standings */}
+                <Box sx={{ mt: 8, mb: 6 }}>
+                    <ResultPageContent sectionTitle="Current F1 2025 Standings" />
+                </Box>
+                
+                <Divider sx={{ my: 5, borderColor: 'rgba(255,255,255,0.1)' }} />
+                
+                {/* Pre-Race Coverage */}
+                <Typography 
+                    variant="h3" 
+                    component="h2" 
+                    sx={{ 
+                        textAlign: 'center', 
+                        mb: 4, 
+                        color: '#E10600',
+                        fontWeight: 700
+                    }}
+                >
+                    Pre-Race Coverage
+                </Typography>
+                
                 {/* Cards */}
-                <Grid container justifyContent={'space-evenly'} rows={2} spacing={4}>
+                <Grid container spacing={4} justifyContent="center" sx={{ mt: 3 }}>
                     {preRaceData.map((item) => (
-                        <Grid key={item.id}>
+                        <Grid item key={item.id} xs={12} sm={6} md={5} lg={3}>
                             <Card
                                 sx={{
-                                    width: '30vw',
+                                    width: '100%',
                                     height: '100%',
                                     position: 'relative',
                                     cursor: 'pointer',
