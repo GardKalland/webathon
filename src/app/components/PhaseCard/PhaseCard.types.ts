@@ -8,6 +8,7 @@ export interface PhaseCardProps {
     image?: string;
     icon?: ReactNode;
     color: string;
+    height?: string;
     link: string;
     hoveredCard: number | null;
     setHoveredCard: (id: number | null) => void;

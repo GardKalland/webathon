@@ -136,6 +136,7 @@ const ThreePhaseLanding = () => {
                                     description={phase.description}
                                     icon={phase.icon}
                                     color={phase.color}
+                                    height={"350px"}
                                     link={phase.link}
                                     hoveredCard={hoveredCard}
                                     setHoveredCard={setHoveredCard}
