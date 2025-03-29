@@ -14,8 +14,10 @@ import {
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FlagIcon from '@mui/icons-material/Flag';
+import SpeedIcon from '@mui/icons-material/Speed';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { PhaseCard } from '@/app/components/PhaseCard';
+import MapPageContent from "@/app/pages/MapPageContent";
 const ThreePhaseLanding = () => {
     const theme = useTheme();
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -42,7 +44,7 @@ const ThreePhaseLanding = () => {
             title: "DURING THE RACE",
             subtitle: "Live Stats & Real-Time Updates",
             description: "Follow all the action as it happens with live timing, tire strategies, team radio highlights, and real-time race positions.",
-            icon: <FlagIcon sx={{ fontSize: 28 }} />,
+            icon: <SpeedIcon sx={{ fontSize: 28 }} />,
             color: "#0090D0", // F1 blue
             link: "/race-during"
         },
@@ -89,7 +91,6 @@ const ThreePhaseLanding = () => {
                         <Typography
                             variant="h1"
                             sx={{
-                                fontSize: { xs: '2rem', md: '3rem' }, // Smaller font size
                                 mb: 2, // Reduced margin
                                 fontWeight: 800,
                                 '& span': {
@@ -120,7 +121,7 @@ const ThreePhaseLanding = () => {
                                 color: alpha(theme.palette.text.primary, 0.8),
                             }}
                         >
-                            Complete coverage from start to finish. Access detailed information for every phase of the race weekend.
+                            Complete coverage from start to finish of the race weekend.
                         </Typography>
                     </Box>
 
@@ -138,7 +139,7 @@ const ThreePhaseLanding = () => {
                                     link={phase.link}
                                     hoveredCard={hoveredCard}
                                     setHoveredCard={setHoveredCard}
-                                    compact={true} // New prop for compact mode
+                                    compact={false} // New prop for compact mode
                                 />
                             </Grid>
                         ))}
@@ -204,23 +205,17 @@ const ThreePhaseLanding = () => {
                 }}
             >
                 <Container>
-                    <Typography variant="h3" sx={{ mb: 3, textAlign: 'center', fontSize: { xs: '1.8rem', md: '2.2rem' } }}>
-                        TRACK <span style={{ color: theme.palette.primary.main }}>MAP</span>
-                    </Typography>
 
-                    {/* Placeholder for the map content - replace with your actual MapLandingContent */}
-                    <Box sx={{
-                        height: '60vh', // Reduced height
-                        backgroundColor: alpha(theme.palette.background.default, 0.5),
-                        borderLeft: `3px solid ${theme.palette.primary.main}`, // Thinner border
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <Typography variant="h5" sx={{ color: alpha(theme.palette.text.primary, 0.7) }}>
-                            MAP CONTENT WILL RENDER HERE
-                        </Typography>
+                    <Box sx={{py: 8}}>
+                        <MapPageContent
+                            fullHeight={false} // Smaller map for the homepage
+                            showFilters={false} // No year selector on homepage
+                            showRacesList={false} // No race cards list on homepage
+                            defaultYear="2025" // Current season
+                            sectionTitle="2025 F1 Season Calendar" // Custom title
+                        />
                     </Box>
+
                 </Container>
             </Box>
         </>
