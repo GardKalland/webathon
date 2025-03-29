@@ -34,18 +34,15 @@ interface F1HeaderProps extends HeaderProps {
 export const F1Header: FC<F1HeaderProps> = ({
                                                 navItems = [
                                                     { label: 'Home', href: '/', isActive: true },
-                                                    { label: 'Teams', href: '/teams' },
-                                                    { label: 'Drivers', href: '/drivers' },
-                                                    { label: 'Calendar', href: '/calendar' },
-                                                    { label: 'Results', href: '/results' },
+                                                    { label: 'Map', href: '/map', },
+                                                    { label: 'Pre-Race', href: '/race-before' },
+                                                    { label: 'During', href: '/race-during' },
+                                                    { label: 'Post-Race', href: '/race-after' },
+                                                    { label: 'echo pit-stop', href: '/echo' },
                                                 ],
                                                 logoHeight = '40px',
                                                 logoWidth = 'auto',
                                                 logoAlt = 'F1 Racing',
-                                                showAuthButtons = true,
-                                                showSpeedometer = true,
-                                                onLogin = () => console.log('Login clicked'),
-                                                onSignup = () => console.log('Signup clicked'),
                                                 ...props
                                             }) => {
     const theme = useTheme();
@@ -152,55 +149,6 @@ export const F1Header: FC<F1HeaderProps> = ({
                         </Box>
                     )}
 
-                    {showSpeedometer && !isMobile && (
-                        <Box sx={{ ml: 2, display: 'flex', alignItems: 'center' }}>
-                            <IconButton
-                                sx={{
-                                    backgroundColor: theme.palette.primary.main,
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.primary.dark,
-                                    },
-                                    transition: 'all 0.2s ease',
-                                }}
-                            >
-                                <SpeedIcon sx={{ color: 'white' }} />
-                            </IconButton>
-                        </Box>
-                    )}
-
-                    {showAuthButtons && !isMobile && (
-                        <Box sx={{ ml: 2 }}>
-                            <Button
-                                variant="outlined"
-                                sx={{
-                                    borderColor: theme.palette.primary.main,
-                                    color: 'white',
-                                    mr: 1,
-                                    '&:hover': {
-                                        borderColor: theme.palette.primary.light,
-                                        backgroundColor: 'rgba(225, 6, 0, 0.05)',
-                                    },
-                                }}
-                                onClick={onLogin}
-                            >
-                                Login
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{
-                                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                                    '&:hover': {
-                                        background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
-                                    },
-                                }}
-                                onClick={onSignup}
-                            >
-                                Sign Up
-                            </Button>
-                        </Box>
-                    )}
-
                     {/* Mobile menu */}
                     {isMobile && (
                         <IconButton
@@ -255,30 +203,6 @@ export const F1Header: FC<F1HeaderProps> = ({
                         ))}
                     </List>
 
-                    {showAuthButtons && (
-                        <Box sx={{ mt: 4, px: 2 }}>
-                            <Button
-                                variant="outlined"
-                                fullWidth
-                                sx={{
-                                    borderColor: theme.palette.primary.main,
-                                    color: 'white',
-                                    mb: 2,
-                                }}
-                                onClick={onLogin}
-                            >
-                                Login
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                onClick={onSignup}
-                            >
-                                Sign Up
-                            </Button>
-                        </Box>
-                    )}
                 </Box>
             </Drawer>
         </AppBar>

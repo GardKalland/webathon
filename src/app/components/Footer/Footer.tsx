@@ -35,28 +35,18 @@ export const Footer: FC<FooterProps> = ({
             links: [
                 { label: 'About F1', href: '/about' },
                 { label: 'Our History', href: '/history' },
-                { label: 'Sustainability', href: '/sustainability' },
-                { label: 'Corporate Info', href: '/corporate' }
+                { label: 'Contact Us', href: '/contactus' }
             ]
         },
         {
             title: 'Racing',
             links: [
-                { label: 'Drivers', href: '/drivers' },
-                { label: 'Teams', href: '/teams' },
-                { label: 'Calendar', href: '/calendar' },
-                { label: 'Standings', href: '/standings' }
+                { label: 'Map', href: '/map' },
+                { label: 'Pre-Race', href: '/pre-race' },
+                { label: 'Mid-race', href: '/mid-race' },
+                { label: 'Post-race', href: '/race-after' }
             ]
         },
-        {
-            title: 'Media',
-            links: [
-                { label: 'News', href: '/news' },
-                { label: 'Video', href: '/video' },
-                { label: 'Photos', href: '/photos' },
-                { label: 'Live Timing', href: '/live-timing' }
-            ]
-        }
     ];
 
     return (
@@ -211,16 +201,16 @@ export const Footer: FC<FooterProps> = ({
                                 color: theme.palette.primary.main
                             }}
                         >
-                            OFFICIAL PARTNERS
+                            UNOFFICIAL PARTNERS
                         </Typography>
 
                         <Grid container spacing={2}>
-                            {[1, 2, 3, 4, 5, 6].map((partner) => (
+                            {["echo", "Webkom", "Bekk", "echo pit-stop"].map((partner) => (
                                 <Grid>
                                     <Box
                                         sx={{
                                             height: '40px',
-                                            width: '100%',
+                                            width: '80px',
                                             backgroundColor: 'rgba(255,255,255,0.05)',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -231,7 +221,7 @@ export const Footer: FC<FooterProps> = ({
                                         }}
                                     >
                                         <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
-                                            Partner {partner}
+                                            {partner}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -246,12 +236,12 @@ export const Footer: FC<FooterProps> = ({
                 <Grid container spacing={2} alignItems="center">
                     <Grid>
                         <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
-                            © {new Date().getFullYear()} F1 Racing. All rights reserved.
+                            © {new Date().getFullYear()} F1 Racing. No rights reserved.
                         </Typography>
                     </Grid>
                     <Grid>
                         <Box sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
-                            {['Privacy Policy', 'Terms of Use', 'Cookie Policy', 'Contact Us'].map((item, index) => (
+                            {['We do not have Privacy Policy', 'Terms of no-use', 'No Cookie Policy'].map((item, index) => (
                                 <Typography
                                     key={index}
                                     variant="caption"
