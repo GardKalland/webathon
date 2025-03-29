@@ -5,13 +5,12 @@ export async function GET(req: Request) {
     const sessionKey = searchParams.get('session_key');
 
     if (!driverNumber) {
-      return new Response(JSON.stringify({ error: 'Missing driver_number' }), { 
+      return new Response(JSON.stringify({ error: 'Missing driver_number' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    console.log('Fetching data for driver number:', driverNumber);
 
     const endpoints = [
       `drivers?driver_number=${driverNumber}`,
@@ -48,18 +47,18 @@ export async function GET(req: Request) {
       })
     );
 
-    return Response.json({ 
-      driverNumber, 
+    return Response.json({
+      driverNumber,
       sessionKey,
       data: responses.filter(r => r.data !== null) // Only include successful responses
     });
   } catch (err) {
     console.error('API error:', err);
     return new Response(
-      JSON.stringify({ 
-        error: err instanceof Error ? err.message : 'Internal server error' 
-      }), 
-      { 
+      JSON.stringify({
+        error: err instanceof Error ? err.message : 'Internal server error'
+      }),
+      {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       }
