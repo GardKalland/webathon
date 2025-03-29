@@ -32,7 +32,7 @@ export const Footer: FC<FooterProps> = ({
         {
             title: 'About',
             links: [
-                { label: 'About F1', href: '/about' },
+                { label: 'About SMART F1', href: '/about' },
                 { label: 'Our History', href: '/history' },
                 { label: 'Contact Us', href: '/contact' }
             ]
@@ -104,7 +104,7 @@ export const Footer: FC<FooterProps> = ({
                                     alignItems: 'center',
                                 }}
                             >
-                                F1<span style={{ color: theme.palette.common.white }}>RACING</span>
+                                SMART<span style={{ color: theme.palette.common.white }}>F1</span>
                             </Typography>
                         </Box>
 
@@ -116,13 +116,14 @@ export const Footer: FC<FooterProps> = ({
                                 maxWidth: '300px'
                             }}
                         >
-                            The ultimate destination for Formula 1 fans. Get the latest news, race results, and exclusive content.
+                            Do you want to become SMART in the the FASTEST sport of all time?
+                            Take a look at our MANY stats.
                         </Typography>
 
                         {showSocialLinks && (
                             <Box sx={{ mb: 4 }}>
                                 <Typography variant="subtitle2" sx={{ mb: 2, color: 'rgba(255,255,255,0.7)' }}>
-                                    FOLLOW US
+                                    FOLLOW US, PLEASE
                                 </Typography>
                                 <Box sx={{ display: 'flex' }}>
                                     {[

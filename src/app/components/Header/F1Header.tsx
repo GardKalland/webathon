@@ -40,7 +40,7 @@ export const F1Header: FC<F1HeaderProps> = ({
                                                 ],
                                                 logoHeight = '40px',
                                                 logoWidth = 'auto',
-                                                logoAlt = 'F1 Racing',
+                                                logoAlt = 'SMART F1',
                                                 ...props
                                             }) => {
     const theme = useTheme();
@@ -123,7 +123,7 @@ export const F1Header: FC<F1HeaderProps> = ({
                                         mr: 1
                                     }}
                                 >
-                                    F1<span style={{ color: theme.palette.common.white }}>RACING</span>
+                                    SMART<span style={{ color: theme.palette.common.white }}>F1</span>
                                 </Typography>
                             </Box>
                         </MuiLink>
@@ -193,7 +193,7 @@ export const F1Header: FC<F1HeaderProps> = ({
                     sx={{ p: 3 }}
                 >
                     <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: theme.palette.primary.main }}>
-                        F1<span style={{ color: 'white' }}>RACING</span>
+                        SMART<span style={{ color: 'white' }}>F1</span>
                     </Typography>
                     <Divider sx={{ backgroundColor: 'rgba(255,255,255,0.1)', mb: 2 }} />
                     <List>

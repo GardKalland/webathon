@@ -5,6 +5,7 @@ export interface PhaseCardProps {
     title: string;
     subtitle: string;
     description: string;
+    toptext?: string;
     image?: string;
     icon?: ReactNode;
     color: string;

@@ -21,6 +21,7 @@ export const PhaseCard: React.FC<PhaseCardProps> = ({
                                                         subtitle,
                                                         description,
                                                         icon,
+                                                        toptext = "",
                                                         color,
                                                         height = "100%",
                                                         link,
@@ -84,7 +85,7 @@ export const PhaseCard: React.FC<PhaseCardProps> = ({
                             fontSize: compact ? '0.65rem' : '0.75rem' // Smaller font in compact mode
                         }}
                     >
-                        PHASE {id}
+                        {toptext}
                     </Typography>
 
                     {/* Icon in top corner */}

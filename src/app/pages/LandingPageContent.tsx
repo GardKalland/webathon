@@ -33,6 +33,7 @@ const ThreePhaseLanding = () => {
         {
             id: 1,
             title: "BEFORE THE RACE",
+            toptext: "GET READY",
             subtitle: "Driver Lineups & Track Analysis",
             description: "Get all the essential information before the lights go out. Team strategies, weather forecasts, qualifying results, and expert predictions.",
             icon: <FlagIcon sx={{ fontSize: 28 }} />,
@@ -42,8 +43,9 @@ const ThreePhaseLanding = () => {
         {
             id: 2,
             title: "DURING THE RACE",
-            subtitle: "Live Stats & Real-Time Updates",
-            description: "Follow all the action as it happens with live timing, tire strategies, team radio highlights, and real-time race positions.",
+            toptext: "SET",
+            subtitle: "Real-Time Stats & Updates",
+            description: "Follow all the action as it happens with live real-time race positions.",
             icon: <SpeedIcon sx={{ fontSize: 28 }} />,
             color: "#0090D0", // F1 blue
             link: "/race-during"
@@ -51,6 +53,7 @@ const ThreePhaseLanding = () => {
         {
             id: 3,
             title: "AFTER THE RACE",
+            toptext: "GO",
             subtitle: "Results & Race Analysis",
             description: "Dive into comprehensive post-race analysis with full results, driver interviews, technical breakdowns, and championship implications.",
             icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />,
@@ -108,7 +111,7 @@ const ThreePhaseLanding = () => {
                                 }
                             }}
                         >
-                            EXPERIENCE EVERY <span>MOMENT</span>
+                            BECOME F1 <span>SMART</span>
                         </Typography>
 
                         <Typography
@@ -134,6 +137,7 @@ const ThreePhaseLanding = () => {
                                     title={phase.title}
                                     subtitle={phase.subtitle}
                                     description={phase.description}
+                                    toptext={phase.toptext}
                                     icon={phase.icon}
                                     color={phase.color}
                                     height={"300px"}
