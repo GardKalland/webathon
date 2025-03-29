@@ -26,7 +26,7 @@ const LandingPageContent = () => {
             id: 1,
             title: 'DRIVER PROFILES',
             description: 'Explore detailed profiles of all F1 drivers, including stats and career highlights.',
-            image: '/driver-profiles.jpg',
+            image: '/post-race-imgs/driver-profiles.jpg',
             icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
             color: theme.palette.primary.main
         },
@@ -34,7 +34,7 @@ const LandingPageContent = () => {
             id: 2,
             title: 'RACE CALENDAR',
             description: 'Stay updated with the latest race schedules, track details, and event timings.',
-            image: '/race-calendar.jpg',
+            image: '/post-race-imgs/race-calendar.jpg',
             icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
             color: '#0090D0'
         },
@@ -42,7 +42,7 @@ const LandingPageContent = () => {
             id: 3,
             title: 'STATISTICS & ANALYTICS',
             description: 'Dive into race statistics, driver performance, and team standings.',
-            image: '/statistics-analytics.jpg',
+            image: '/post-race-imgs/statistics-analytics.jpg',
             icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
             color: '#F596C8'
         }
