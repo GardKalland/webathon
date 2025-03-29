@@ -127,10 +127,10 @@ export const Footer: FC<FooterProps> = ({
                 </Typography>
                 <Box sx={{ display: 'flex' }}>
                   {[
-                    { icon: <FacebookIcon />, href: 'https://facebook.com' },
+                    { icon: <FacebookIcon />, href: 'https://www.facebook.com/groups/2326568395' },
                     { icon: <TwitterIcon />, href: 'https://twitter.com' },
-                    { icon: <InstagramIcon />, href: 'https://instagram.com' },
-                    { icon: <YouTubeIcon />, href: 'https://youtube.com' },
+                    { icon: <InstagramIcon />, href: 'https://www.instagram.com/badeklubben.edition/' },
+                    //{ icon: <YouTubeIcon />, href: 'https://youtube.com' },
                   ].map((social, index) => (
                     <IconButton
                       key={index}
