@@ -1,10 +1,6 @@
 import { NextRequest } from 'next/server';
 import { f1Service } from '../../../database/f1Service';
 
-// RapidAPI F1 configuration
-const RAPIDAPI_BASE_URL = 'https://api-formula-1.p.rapidapi.com';
-const RAPIDAPI_KEY = 'a1ac4046abmsh57faebb0e18b899p119ae5jsnb2d846a7b87b';
-const RAPIDAPI_HOST = 'api-formula-1.p.rapidapi.com';
 
 /**
  * Format API data to our application format
@@ -77,115 +73,7 @@ function formatRaceResults(data: any[]) {
   });
 }
 
-/**
- * Fetch data from the RapidAPI Formula 1 API
- */
-async function fetchDriverStandings(year: number) {
-  try {
-    const url = `${RAPIDAPI_BASE_URL}/rankings/drivers?season=${year}`;
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': RAPIDAPI_KEY,
-        'x-rapidapi-host': RAPIDAPI_HOST
-      }
-    };
-    
-    const response = await fetch(url, options);
-    
-    if (!response.ok) {
-      console.log(`API error: ${response.status} ${response.statusText}`);
-      return [];
-    }
-    
-    const data = await response.json();
-    console.log(data);
-    return formatDriverStandings(data.response || []);
-  } catch (err) {
-    console.error('Error fetching driver standings:', err);
-    return [];
-  }
-}
 
-async function fetchConstructorStandings(year: number) {
-  try {
-    const url = `${RAPIDAPI_BASE_URL}/rankings/teams?season=${year}`;
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': RAPIDAPI_KEY,
-        'x-rapidapi-host': RAPIDAPI_HOST
-      }
-    };
-    
-    const response = await fetch(url, options);
-    
-    if (!response.ok) {
-      console.error(`API error: ${response.status} ${response.statusText}`);
-      return [];
-    }
-    
-    const data = await response.json();
-    return formatConstructorStandings(data.response || []);
-  } catch (err) {
-    console.error('Error fetching constructor standings:', err);
-    return [];
-  }
-}
-
-async function fetchRaceResults(year: number) {
-  try {
-    // Get race calendar for the season
-    const calendarUrl = `${RAPIDAPI_BASE_URL}/races?season=${year}`;
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': RAPIDAPI_KEY,
-        'x-rapidapi-host': RAPIDAPI_HOST
-      }
-    };
-    
-    const calendarResponse = await fetch(calendarUrl, options);
-    
-    if (!calendarResponse.ok) {
-      console.error(`API error: ${calendarResponse.status} ${calendarResponse.statusText}`);
-      return [];
-    }
-    
-    const calendarData = await calendarResponse.json();
-    const races = calendarData.response || [];
-    
-    // For each race, get the results if the race has happened
-    const today = new Date();
-    const completedRaces = races.filter((race: any) => {
-      const raceDate = new Date(race.date);
-      return raceDate < today;
-    });
-    
-    // For each completed race, try to get results
-    // Note: This might hit API rate limits if there are many races, 
-    // but it's the most accurate approach
-    for (const race of completedRaces) {
-      try {
-        const raceId = race.id;
-        const resultsUrl = `${RAPIDAPI_BASE_URL}/races/results?race=${raceId}`;
-        const resultsResponse = await fetch(resultsUrl, options);
-        
-        if (resultsResponse.ok) {
-          const resultsData = await resultsResponse.json();
-          race.results = resultsData.response || [];
-        }
-      } catch (err) {
-        console.error(`Error fetching results for race ${race.id}:`, err);
-      }
-    }
-    
-    return formatRaceResults(races);
-  } catch (err) {
-    console.error('Error fetching race results:', err);
-    return [];
-  }
-}
 
 /**
  * Generate mock data when API doesn't have what we need
