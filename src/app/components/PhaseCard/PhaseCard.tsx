@@ -16,20 +16,6 @@ import Link from 'next/link';
 import { PhaseCardProps } from './PhaseCard.types';
 
 export const PhaseCard: React.FC<PhaseCardProps> = ({
-<<<<<<< HEAD
-                                                        id,
-                                                        title,
-                                                        subtitle,
-                                                        description,
-                                                        icon,
-                                                        toptext = "",
-                                                        color,
-                                                        height = "100%",
-                                                        link,
-                                                        hoveredCard,
-                                                        setHoveredCard,
-                                                        compact = false // Default to standard size
-=======
   id,
   title,
   subtitle,
@@ -78,7 +64,7 @@ export const PhaseCard: React.FC<PhaseCardProps> = ({
             backgroundColor: color,
           }}
         />
->>>>>>> 6092aee (we racing g🏎️)
+
 
         {/* Header with icon */}
         <Box sx={{
