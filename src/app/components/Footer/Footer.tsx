@@ -35,7 +35,7 @@ export const Footer: FC<FooterProps> = ({
             links: [
                 { label: 'About F1', href: '/about' },
                 { label: 'Our History', href: '/history' },
-                { label: 'Contact Us', href: '/contactus' }
+                { label: 'Contact Us', href: '/contact' }
             ]
         },
         {
@@ -48,6 +48,13 @@ export const Footer: FC<FooterProps> = ({
             ]
         },
     ];
+    const partners = [
+        {name: "echo", externalhref: "https://echo.uib.no"},
+        {name: "Webkom", externalhref: "https://echo.uib.no/for-studenter/gruppe/webkom"},
+        {name: "Bekk", externalhref: "https://bekk.no"},
+        {name: "ECMAScript", externalhref: "https://ecma-international.org/publications-and-standards/standards/ecma-262/"},
+        {name: "echo pit-stop", externalhref: "https://echo.uib.no/for-studenter/gruppe/echopitstop"}
+    ]
 
     return (
         <Box
@@ -163,13 +170,12 @@ export const Footer: FC<FooterProps> = ({
                             </Typography>
 
                             <List disablePadding>
-                                {section.links.map((link, linkIndex) => (
+                                {section.links.map((link,linkIndex) => (
                                     <ListItem
                                         key={linkIndex}
                                         disablePadding
                                         sx={{ mb: 1 }}
                                     >
-                                        <Link href={link.href} passHref>
                                             <MuiLink
                                                 sx={{
                                                     color: 'rgba(255,255,255,0.7)',
@@ -181,10 +187,11 @@ export const Footer: FC<FooterProps> = ({
                                                         textDecoration: 'none',
                                                     }
                                                 }}
+                                                href={link.href}
+                                                component={Link}
                                             >
                                                 {link.label}
                                             </MuiLink>
-                                        </Link>
                                     </ListItem>
                                 ))}
                             </List>
@@ -205,9 +212,22 @@ export const Footer: FC<FooterProps> = ({
                         </Typography>
 
                         <Grid container spacing={2}>
-                            {["echo", "Webkom", "Bekk", "echo pit-stop"].map((partner) => (
-                                <Grid>
-                                    <Box
+                            {partners.map((partner) => (
+                                    <MuiLink
+                                        component={Link} href={partner.externalhref}
+                                        sx={{
+                                            color: 'rgba(255,255,255,0.7)',
+                                            textDecoration: 'none',
+                                            fontSize: '0.9rem',
+                                            transition: 'color 0.2s ease',
+                                            '&:hover': {
+                                                color: 'white',
+                                                textDecoration: 'none',
+                                            }
+                                        }}>
+                                        <Grid key={partner.name}>
+
+                                        <Box
                                         sx={{
                                             height: '40px',
                                             width: '80px',
@@ -221,10 +241,12 @@ export const Footer: FC<FooterProps> = ({
                                         }}
                                     >
                                         <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
-                                            {partner}
+                                            {partner.name}
                                         </Typography>
                                     </Box>
-                                </Grid>
+                                        </Grid>
+
+                                    </MuiLink>
                             ))}
                         </Grid>
                     </Grid>
