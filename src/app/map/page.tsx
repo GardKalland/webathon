@@ -20,19 +20,6 @@ interface RaceLocation {
   raceId?: number; // For linking to race details
 }
 
-// F1DB API response type for races
-interface F1DBRace {
-  name: string;
-  date: string;
-  year: number;
-  round: number;
-  raceId: number;
-  circuit: string; 
-  location: string;
-  country: string;
-  lat: number;
-  lng: number;
-}
 
 // Load the map component with no SSR
 const MapComponent = dynamic(() => import('./MapComponent'), {
