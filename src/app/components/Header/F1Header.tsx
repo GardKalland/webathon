@@ -31,6 +31,7 @@ interface F1HeaderProps extends HeaderProps {
 export const F1Header: FC<F1HeaderProps> = ({
                                                 navItems = [
                                                     { label: 'Home', href: '/', isActive: true },
+                                                    { label: 'Standings', href: '/results'},
                                                     { label: 'Map', href: '/map', },
                                                     { label: 'Pre-Race', href: '/race-pre' },
                                                     { label: 'During', href: '/race-during' },
