@@ -259,7 +259,7 @@ export const Footer: FC<FooterProps> = ({
         <Grid container spacing={2} alignItems="center">
           <Grid>
             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)' }}>
-              © {new Date().getFullYear()} F1 Racing. No rights reserved.
+              © {new Date().getFullYear()} SMART F1. No rights reserved.
             </Typography>
           </Grid>
           <Grid>

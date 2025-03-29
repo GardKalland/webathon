@@ -203,7 +203,7 @@ const ThreePhaseLanding = () => {
             <Box
                 ref={mapContentRef}
                 sx={{
-                    minHeight: '80vh', // Reduced height
+                    minHeight: '100vh', // Reduced height
                     backgroundColor: theme.palette.background.paper,
                     pt: 6, // Reduced padding
                     pb: 6 // Reduced padding
@@ -211,9 +211,9 @@ const ThreePhaseLanding = () => {
             >
                 <Container>
 
-                    <Box sx={{py: 8}}>
+                    <Box sx={{py: 10}}>
                         <MapPageContent
-                            fullHeight={false} // Smaller map for the homepage
+                            fullHeight={true} // Smaller map for the homepage
                             showFilters={false} // No year selector on homepage
                             showRacesList={false} // No race cards list on homepage
                             defaultYear="2025" // Current season
