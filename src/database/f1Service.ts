@@ -15,6 +15,105 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
  */
 export const f1Service = {
   /**
+   * Get driver standings for a specific season
+   * @param season The F1 season year
+   */
+  getDriverStandings(season: number = 2025) {
+    const cacheKey = `getDriverStandings_${season}`;
+    
+    // Check if we have a valid cached result
+    if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < CACHE_TTL) {
+      console.log(`Cache hit for ${cacheKey}`);
+      return cache[cacheKey].data;
+    }
+    
+    // If no cache or expired, execute the query
+    console.log(`Cache miss for ${cacheKey}, querying database`);
+    const db = getDatabase();
+    
+    try {
+      // First check if we have standings in our dedicated table
+      const query = db.prepare(`
+        SELECT position, driver_id, driver_name as name, team, points
+        FROM driver_standings
+        WHERE season = ?
+        ORDER BY position ASC
+      `);
+      
+      const result = query.all(season);
+      
+      // Return database results or empty array
+      if (result && result.length > 0) {
+        console.log(`Found ${result.length} driver standings in database for season ${season}`);
+        
+        // Cache the result
+        cache[cacheKey] = {
+          data: result,
+          timestamp: Date.now()
+        };
+        
+        return result;
+      }
+      
+      // For other seasons with no data
+      console.log(`No driver standings available for season ${season}`);
+      return [];
+    } catch (error) {
+      console.error(`Error querying driver standings for season ${season}:`, error);
+      return [];
+    }
+  },
+  
+  /**
+   * Get constructor standings for a specific season
+   * @param season The F1 season year
+   */
+  getConstructorStandings(season: number = 2025) {
+    const cacheKey = `getConstructorStandings_${season}`;
+    
+    // Check if we have a valid cached result
+    if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < CACHE_TTL) {
+      console.log(`Cache hit for ${cacheKey}`);
+      return cache[cacheKey].data;
+    }
+    
+    // If no cache or expired, execute the query
+    console.log(`Cache miss for ${cacheKey}, querying database`);
+    const db = getDatabase();
+    
+    try {
+      // First check if we have standings in our dedicated table
+      const query = db.prepare(`
+        SELECT position, team_name as name, points
+        FROM constructor_standings
+        WHERE season = ?
+        ORDER BY position ASC
+      `);
+      
+      const result = query.all(season);
+      
+      // Return database results or empty array
+      if (result && result.length > 0) {
+        console.log(`Found ${result.length} constructor standings in database for season ${season}`);
+        
+        // Cache the result
+        cache[cacheKey] = {
+          data: result,
+          timestamp: Date.now()
+        };
+        
+        return result;
+      }
+      
+      // For other seasons with no data
+      console.log(`No constructor standings available for season ${season}`);
+      return [];
+    } catch (error) {
+      console.error(`Error querying constructor standings for season ${season}:`, error);
+      return [];
+    }
+  },
+  /**
    * Get a driver's complete history
    * @param driverId Driver ID or surname
    */

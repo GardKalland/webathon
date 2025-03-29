@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { getDatabase } from '../../../database/db';
+import { f1Service } from '../../../database/f1Service';
 
 // RapidAPI F1 configuration
 const RAPIDAPI_BASE_URL = 'https://api-formula-1.p.rapidapi.com';
@@ -330,19 +330,21 @@ export async function GET(req: NextRequest) {
     
     switch (endpoint) {
       case 'driver-standings':
-        // Use the hardcoded 2025 driver standings data
-        data = generateMockDriverStandings(year);
-        usedMockData = true;
+        // Get data directly from the database
+        data = f1Service.getDriverStandings(year);
+        // Not using mock data anymore
+        usedMockData = false;
         break;
         
       case 'constructor-standings':
-        // Use the hardcoded 2025 constructor standings data
-        data = generateMockConstructorStandings(year);
-        usedMockData = true;
+        // Get data directly from the database
+        data = f1Service.getConstructorStandings(year);
+        // Not using mock data anymore
+        usedMockData = false;
         break;
         
       case 'race-results':
-        // Use the hardcoded 2025 race results data
+        // For race results, still use the mock data for now
         data = generateMockRaceResults(year);
         usedMockData = true;
         break;

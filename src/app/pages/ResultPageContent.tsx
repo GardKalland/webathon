@@ -345,7 +345,7 @@ export default function ResultPageContent({
                       <TableBody>
                         {driverStandings.map((driver, index) => (
                           <TableRow 
-                            key={driver.driverId} 
+                            key={driver.name} 
                             hover
                             sx={{ 
                               bgcolor: index % 2 === 0 ? 'rgba(0,0,0,0.1)' : 'transparent',
