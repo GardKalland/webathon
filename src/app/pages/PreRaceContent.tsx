@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Container,
@@ -11,15 +11,85 @@ import {
     CardMedia,
     useTheme,
     alpha,
-    Divider
+    Divider,
+    Paper,
+    Chip,
+    CircularProgress
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import UmbrellaIcon from '@mui/icons-material/Umbrella';
+import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
+import CloudIcon from '@mui/icons-material/Cloud';
 import ResultPageContent from './ResultPageContent';
+
+// Simple weather data for the race weekend
+interface SimpleWeather {
+    date: string;
+    day: string;
+    hasRain: boolean;
+}
 
 const PreRaceContent = () => {
     const theme = useTheme();
+    const [weatherData, setWeatherData] = useState<SimpleWeather[]>([]);
+    const [weatherLoading, setWeatherLoading] = useState(true);
+    const [weatherError, setWeatherError] = useState<string | null>(null);
+    
+    // Race weekend dates and activities
+    const raceWeekend = [
+        { date: '2025-04-04', day: 'Practice' },
+        { date: '2025-04-05', day: 'Qualifying' },
+        { date: '2025-04-06', day: 'Race Day' }
+    ];
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+            try {
+                setWeatherLoading(true);
+                
+                // Use the Suzuka Circuit coordinates
+                const res = await fetch(
+                    'https://api.open-meteo.com/v1/forecast?latitude=34.85&longitude=136.54&daily=precipitation_sum&timezone=Asia/Tokyo&start_date=2025-04-04&end_date=2025-04-06'
+                );
+                
+                if (!res.ok) {
+                    throw new Error('Failed to fetch weather data');
+                }
+                
+                const data = await res.json();
+                
+                if (data.daily && data.daily.precipitation_sum) {
+                    // Create simple weather forecast
+                    const forecast = raceWeekend.map((day, index) => ({
+                        date: day.date,
+                        day: day.day,
+                        hasRain: data.daily.precipitation_sum[index] > 0.5 // Consider it rainy if more than 0.5mm
+                    }));
+                    
+                    setWeatherData(forecast);
+                } else {
+                    throw new Error('Invalid API response format');
+                }
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                setWeatherError('Could not load weather data');
+                
+                // Fallback to mock data
+                setWeatherData(raceWeekend.map(day => ({
+                    ...day,
+                    hasRain: day.day === 'Qualifying' || day.day === 'Race Day' // Mock data: rain on qualifying and race day
+                })));
+            } finally {
+                setWeatherLoading(false);
+            }
+        };
+  
+        fetchWeather();
+    }, []);
+
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
     // Data placeholders for landing page sections
@@ -131,6 +201,80 @@ const PreRaceContent = () => {
                     </Box>
                 </Box>
                 
+                {/* Weather Forecast */}
+                <Box sx={{ mt: 5, mb: 4, textAlign: 'center' }}>
+                    <Typography 
+                        variant="h4" 
+                        component="h2"
+                        sx={{ 
+                            fontWeight: 700, 
+                            textAlign: 'center',
+                            mb: 3,
+                            color: '#E10600'
+                        }}
+                    >
+                        Race Weekend Weather
+                    </Typography>
+                    
+                    {weatherLoading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
+                            <CircularProgress size={40} sx={{ color: '#E10600' }} />
+                        </Box>
+                    ) : weatherError ? (
+                        <Typography 
+                            variant="body1" 
+                            sx={{ color: 'error.main', textAlign: 'center', my: 2 }}
+                        >
+                            {weatherError}
+                        </Typography>
+                    ) : (
+                        <Grid container spacing={3} justifyContent="center" sx={{ maxWidth: 900, mx: 'auto' }}>
+                            {weatherData.map((day) => (
+                                <Grid item xs={12} sm={4} key={day.date}>
+                                    <Paper
+                                        elevation={3}
+                                        sx={{
+                                            p: 3,
+                                            backgroundColor: 'rgba(21, 21, 30, 0.8)',
+                                            borderTop: `4px solid ${day.hasRain ? '#E10600' : '#4CAF50'}`,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            gap: 2
+                                        }}
+                                    >
+                                        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                            {day.day}
+                                        </Typography>
+                                        
+                                        <Box sx={{ fontSize: 60, color: day.hasRain ? '#4682B4' : '#FFD700' }}>
+                                            {day.hasRain ? <UmbrellaIcon fontSize="inherit" /> : <WbSunnyIcon fontSize="inherit" />}
+                                        </Box>
+                                        
+                                        <Typography 
+                                            variant="body1" 
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                color: day.hasRain ? '#E10600' : '#4CAF50'
+                                            }}
+                                        >
+                                            {day.hasRain ? 'Rain Expected' : 'Dry Conditions'}
+                                        </Typography>
+                                        
+                                        <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                                            {new Date(day.date).toLocaleDateString('en-US', {
+                                                weekday: 'long',
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })}
+                                        </Typography>
+                                    </Paper>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
+                </Box>
+               
                 {/* Current Standings */}
                 <Box sx={{ mt: 8, mb: 6 }}>
                     <ResultPageContent sectionTitle="Current F1 2025 Standings" />
