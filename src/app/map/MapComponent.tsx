@@ -122,14 +122,20 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
           mapInstanceRef.current.remove();
         }
 
-        // Create new map with a wider view
-        const map = L.default.map(mapRef.current!).setView([25, 10], 2);
+        // Create new map with a wider view and zoom constraints
+        const map = L.default.map(mapRef.current!, {
+          minZoom: 2,  // Prevent zooming out too far
+          maxBounds: [[-90, -180], [90, 180]],  // Restrict panning to world bounds
+          maxBoundsViscosity: 1.0,  // Make bounds "hard" - can't go beyond them
+          worldCopyJump: true  // Enables seamless horizontal panning
+        }).setView([25, 10], 2);
         
         // Add a simpler, less detailed tile layer
         L.default.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
           subdomains: 'abcd',
-          maxZoom: 19
+          maxZoom: 12,  // Limit maximum zoom level
+          noWrap: true  // Prevents multiple copies of the world from showing
         }).addTo(map);
         
         // Save map instance to ref for later use
@@ -190,8 +196,8 @@ export default function MapComponent({ races, selectedRace }: MapComponentProps)
     if (!mapInstanceRef.current || !selectedRace) return;
     
     import('leaflet').then(() => {
-      // Fly to the selected race with a closer zoom level
-      mapInstanceRef.current.flyTo([selectedRace.lat, selectedRace.lng], 9, {
+      // Fly to the selected race with an appropriate zoom level (not too close)
+      mapInstanceRef.current.flyTo([selectedRace.lat, selectedRace.lng], 7, {
         animate: true,
         duration: 1
       });

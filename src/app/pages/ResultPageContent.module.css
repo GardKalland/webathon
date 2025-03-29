@@ -1,0 +1,303 @@
+.container {
+  padding: 1rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #E10600; /* F1 red */
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.standingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.standingsCard {
+  background-color: rgba(21, 21, 30, 0.8);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #E10600;
+  backdrop-filter: blur(10px);
+}
+
+.standingsTitle {
+  color: #E10600;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.standingsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.standingsTable th {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.standingsTable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.standingsTable tr:last-child td {
+  border-bottom: none;
+}
+
+.position {
+  font-weight: 700;
+  color: white;
+  width: 40px;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.points {
+  font-weight: 700;
+  color: #E10600;
+  text-align: right;
+}
+
+.racesTitle {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--foreground);
+}
+
+.raceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.raceCard {
+  background-color: rgba(21, 21, 30, 0.8);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid #E10600;
+  backdrop-filter: blur(10px);
+}
+
+.raceCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.raceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.raceInfo {
+  flex: 1;
+}
+
+.raceTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.raceSubtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.raceDate {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.round {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: rgba(225, 6, 0, 0.8);
+  line-height: 1;
+  margin-left: 1rem;
+}
+
+.podiumSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.podiumTitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.75rem;
+}
+
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.podiumPosition {
+  padding: 0.75rem;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.first {
+  background-color: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.second {
+  background-color: rgba(192, 192, 192, 0.15);
+  border: 1px solid rgba(192, 192, 192, 0.3);
+}
+
+.third {
+  background-color: rgba(205, 127, 50, 0.15);
+  border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+.podiumDriver {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.podiumTeam {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.viewDetailsButton {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  background-color: rgba(225, 6, 0, 0.8);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.viewDetailsButton:hover {
+  background-color: #E10600;
+}
+
+.filterContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.seasonSelect {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--gray-alpha-200, #ccc);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.loading {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #E10600;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.retryButton {
+  padding: 0.5rem 1.5rem;
+  background-color: #E10600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #c20500;
+}
+
+.noData {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .standingsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+  
+  .filterContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
