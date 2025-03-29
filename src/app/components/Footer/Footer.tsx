@@ -28,7 +28,6 @@ export const Footer: FC<FooterProps> = ({
                                                 showSocialLinks = true
                                             }) => {
     const theme = useTheme();
-
     const footerLinks = [
         {
             title: 'About',

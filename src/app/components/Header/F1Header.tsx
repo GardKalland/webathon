@@ -16,15 +16,12 @@ import {
     Divider,
     Button,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    Link as MuiLink,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import SpeedIcon from '@mui/icons-material/Speed';
 import { Typography } from '@/app/ui/Typography';
-import { Logo } from '@/app/ui/Logo';
-import { Navigation } from '@/app/ui/Navigation';
 import { HeaderProps } from './Header.types';
-import Image from 'next/image';
 import Link from 'next/link';
 
 interface F1HeaderProps extends HeaderProps {
@@ -100,8 +97,19 @@ export const F1Header: FC<F1HeaderProps> = ({
                     }}
                 >
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* Replace with actual F1-style logo */}
-                        <Link href="/" passHref>
+                        <MuiLink component={Link}
+                                 href="/"
+                                 sx={{
+                                     color: 'rgba(255,255,255,0.7)',
+                                     textDecoration: 'none',
+                                     fontSize: '0.9rem',
+                                     transition: 'color 0.2s ease',
+                                     '&:hover': {
+                                         color: 'white',
+                                         textDecoration: 'none',
+                                     }
+                                 }}
+                        >
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography
                                     variant="h4"
@@ -117,7 +125,7 @@ export const F1Header: FC<F1HeaderProps> = ({
                                     F1<span style={{ color: theme.palette.common.white }}>RACING</span>
                                 </Typography>
                             </Box>
-                        </Link>
+                        </MuiLink>
                     </Box>
 
                     <Box sx={{ flexGrow: 1 }} />
