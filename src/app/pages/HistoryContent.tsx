@@ -14,7 +14,10 @@ export default function HistoryContent() {
     return (
         <Container maxWidth="lg" sx={{ py: 6 }}>
             <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 4, textAlign: 'center' }}>
-                Our Team's Journey: From Faddergruppe to Real-time F1 Racing App
+                Our Team's Journey
+            </Typography>
+            <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, mb: 4, textAlign: 'center' }}>
+                From Faddergruppe to Real-time F1 Stats
             </Typography>
 
             <Paper elevation={3} sx={{ p: 4, mb: 6, backgroundColor: 'rgba(0,0,0,0.6)', color: 'white', borderRadius: 2 }}>
@@ -22,13 +25,13 @@ export default function HistoryContent() {
                     The Beginning: How Four Informatics Students Joined Forces
                 </Typography>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     It all started in the halls of the informatics department, where four students with vastly different backgrounds
                     but a shared passion for technology would eventually create something extraordinary.
                 </Typography>
 
                 <Grid container spacing={4} sx={{ my: 4 }}>
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Avatar sx={{ bgcolor: '#DC0000', mr: 2 }}>A</Avatar>
                             <Typography variant="h6" component="h3" sx={{ fontWeight: 600 }}>Arne</Typography>
@@ -39,7 +42,7 @@ export default function HistoryContent() {
                                 sx={{ ml: 2, backgroundColor: 'rgba(255,0,0,0.3)' }}
                             />
                         </Box>
-                        <Typography paragraph>
+                        <Typography sx={{ mb: 2 }}>
                             <strong>Arne</strong> and <strong>Gard</strong> first met during their freshman orientation in the same faddergruppe.
                             While other students were focused on the social aspects of university life, these two were already discussing the
                             architectural merits of various web frameworks. Arne, known for his meticulous attention to detail and peculiar aversion
@@ -48,7 +51,7 @@ export default function HistoryContent() {
                         </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Avatar sx={{ bgcolor: '#0090FF', mr: 2 }}>G</Avatar>
                             <Typography variant="h6" component="h3" sx={{ fontWeight: 600 }}>Gard</Typography>
@@ -59,14 +62,14 @@ export default function HistoryContent() {
                                 sx={{ ml: 2, backgroundColor: 'rgba(0,144,255,0.3)' }}
                             />
                         </Box>
-                        <Typography paragraph>
+                        <Typography sx={{ mb: 2 }}>
                             Despite Gard's reputation for enjoying perhaps a bit too much of the student nightlife, his ability to produce
                             remarkable code even after a night out was nothing short of impressive. Coming from the same faddergruppe as Arne,
                             their collaboration began with small projects before evolving into something much bigger.
                         </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Avatar sx={{ bgcolor: '#FF8700', mr: 2 }}>L</Avatar>
                             <Typography variant="h6" component="h3" sx={{ fontWeight: 600 }}>Lars</Typography>
@@ -77,7 +80,7 @@ export default function HistoryContent() {
                                 sx={{ ml: 2, backgroundColor: 'rgba(255,135,0,0.3)' }}
                             />
                         </Box>
-                        <Typography paragraph>
+                        <Typography sx={{ mb: 2 }}>
                             <strong>Lars</strong> joined the duo during a mandatory algorithms course. His extensive knowledge of optimization
                             techniques immediately caught their attention when he optimized a sorting algorithm that the professor had claimed
                             couldn't be improved further. Lars came with his own unique challenge – severe allergies to nearly everything except
@@ -86,7 +89,7 @@ export default function HistoryContent() {
                         </Typography>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                             <Avatar sx={{ bgcolor: '#00D2BE', mr: 2 }}>O</Avatar>
                             <Typography variant="h6" component="h3" sx={{ fontWeight: 600 }}>Ole</Typography>
@@ -97,7 +100,7 @@ export default function HistoryContent() {
                                 sx={{ ml: 2, backgroundColor: 'rgba(0,210,190,0.3)' }}
                             />
                         </Box>
-                        <Typography paragraph>
+                        <Typography sx={{ mb: 2 }}>
                             <strong>Ole</strong>, the final piece of the puzzle, was initially just a friendly face they knew from the department.
                             With his distinctive mustache (which had once been gently stroked by a professor who mistook it for a pet during a
                             virtual lecture in the pandemic era), Ole had built a reputation as the go-to person for elegant UI solutions. It wasn't
@@ -113,12 +116,12 @@ export default function HistoryContent() {
                     The Perfect Storm of Skills
                 </Typography>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     The team's formation was almost inevitable given their complementary strengths:
                 </Typography>
 
                 <Grid container spacing={3} sx={{ my: 4 }}>
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{
                             p: 3,
                             border: '1px solid rgba(220,0,0,0.5)',
@@ -138,7 +141,7 @@ export default function HistoryContent() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{
                             p: 3,
                             border: '1px solid rgba(0,144,255,0.5)',
@@ -158,7 +161,7 @@ export default function HistoryContent() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{
                             p: 3,
                             border: '1px solid rgba(255,135,0,0.5)',
@@ -178,7 +181,7 @@ export default function HistoryContent() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{
                             p: 3,
                             border: '1px solid rgba(0,210,190,0.5)',
@@ -209,35 +212,35 @@ export default function HistoryContent() {
                     <DirectionsCarIcon sx={{ fontSize: 80, color: 'red' }} />
                 </Box>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     The idea for their real-time F1 racing dashboard came during a particularly heated debate about whether
                     formula one racing strategy was more about driver skill or data analysis. Gard, in what the others initially
                     dismissed as post-social-event enthusiasm, suggested they could build a platform that would visualize real-time
                     race data in a way that would make strategy decisions obvious even to casual fans.
                 </Typography>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     The project seemed ambitious, perhaps too ambitious for a team of four students. But each saw an opportunity
                     to push their skills to the limit:
                 </Typography>
 
                 <Box sx={{ my: 3, pl: 2, borderLeft: '4px solid red' }}>
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Arne</strong> designed a database schema that could efficiently store and retrieve historical race data
                         while accommodating real-time updates.
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Gard</strong> integrated with the OpenF1 API, creating a robust middleware that could handle API rate
                         limiting while ensuring their application always had the latest data.
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Lars</strong> developed a prediction algorithm that could estimate race outcomes based on current positions,
                         tire wear, and historical performance on specific tracks.
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Ole</strong> crafted an interface that displayed complex race data in an intuitive, visually appealing manner,
                         with his signature smooth transitions making position changes and strategy shifts immediately apparent.
                     </Typography>
@@ -249,43 +252,43 @@ export default function HistoryContent() {
                     The Technical Stack
                 </Typography>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     They chose Next.js as their framework for several compelling reasons:
                 </Typography>
 
                 <Box sx={{ my: 3, pl: 3 }}>
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>1. Server-side rendering</strong> was crucial for their SEO strategy, as they wanted race information to be discoverable
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>2. API routes</strong> simplified their backend implementation, allowing them to create secure endpoints for data processing
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>3. React's component model</strong> was perfect for the modular UI they envisioned, with reusable elements for
                         driver cards, race statistics, and track visualization
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>4. Incremental Static Regeneration</strong> let them update race data without rebuilding the entire application
                     </Typography>
                 </Box>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     The application architecture followed a clean separation of concerns:
                 </Typography>
 
                 <Box sx={{ my: 3, pl: 2, borderLeft: '4px solid white' }}>
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Data Layer</strong>: API routes handled communication with the OpenF1 API, implementing caching, rate limiting, and data transformation
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Application Layer</strong>: Server components processed the data, performed calculations, and prepared it for display
                     </Typography>
 
-                    <Typography paragraph>
+                    <Typography sx={{ mb: 2 }}>
                         <strong>Presentation Layer</strong>: Client components handled user interactions and real-time updates through WebSockets
                     </Typography>
                 </Box>
@@ -296,29 +299,14 @@ export default function HistoryContent() {
                     The Challenges
                 </Typography>
 
-                <Typography paragraph>
+                <Typography sx={{ mb: 2 }}>
                     The project wasn't without its challenges:
                 </Typography>
 
                 <Box sx={{ my: 3 }}>
-                    <Typography paragraph sx={{ p: 2, backgroundColor: 'rgba(220,0,0,0.1)', borderRadius: 1, mb: 2 }}>
+                    <Typography sx={{ p: 2, backgroundColor: 'rgba(220,0,0,0.1)', borderRadius: 1, mb: 2 }}>
                         During one particularly intense development session, <strong>Arne</strong> had to ban all chips from the room,
-                        leading to a snack crisis that was only resolved when Lars discovered a local shop selling his safe peanut-based alternatives.
-                    </Typography>
-
-                    <Typography paragraph sx={{ p: 2, backgroundColor: 'rgba(0,144,255,0.1)', borderRadius: 1, mb: 2 }}>
-                        The team nearly lost a critical algorithm when <strong>Gard's</strong> laptop crashed after a particularly enthusiastic
-                        celebration of a successful API integration. Thankfully, their rigorous git commit practices saved the day.
-                    </Typography>
-
-                    <Typography paragraph sx={{ p: 2, backgroundColor: 'rgba(255,135,0,0.1)', borderRadius: 1, mb: 2 }}>
-                        <strong>Lars</strong> once had to code wearing gloves and a mask after discovering that the new keyboard
-                        they'd purchased contained trace elements he was allergic to.
-                    </Typography>
-
-                    <Typography paragraph sx={{ p: 2, backgroundColor: 'rgba(0,210,190,0.1)', borderRadius: 1 }}>
-                        <strong>Ole's</strong> mustache became unexpectedly famous when it appeared in a tech blog screenshot of their application,
-                        leading to a brief but entertaining Twitter moment about "the developer with the magnificent handlebar."
+                        leading to a snack crisis that was only resolved when Lars discovered a local shop selling his safe peanut-based alternatives
                     </Typography>
                 </Box>
             </Paper>
@@ -334,7 +322,7 @@ export default function HistoryContent() {
                 </Typography>
 
                 <Grid container spacing={2} sx={{ my: 3 }}>
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ p: 2, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 1, height: '100%' }}>
                             <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>Real-time position updates</Typography>
                             <Typography>
@@ -343,7 +331,7 @@ export default function HistoryContent() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ p: 2, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 1, height: '100%' }}>
                             <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>Dynamic driver cards</Typography>
                             <Typography>
@@ -352,7 +340,7 @@ export default function HistoryContent() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ p: 2, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 1, height: '100%' }}>
                             <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>Predictive strategy analysis</Typography>
                             <Typography>
@@ -361,7 +349,7 @@ export default function HistoryContent() {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid size={6}>
                         <Box sx={{ p: 2, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 1, height: '100%' }}>
                             <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>Historical comparisons</Typography>
                             <Typography>
@@ -396,21 +384,21 @@ export default function HistoryContent() {
 
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                     <Grid container spacing={2} justifyContent="center">
-                        <Grid item>
+                        <Grid>
                             <Avatar sx={{ bgcolor: '#DC0000' }}>A</Avatar>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                             <Avatar sx={{ bgcolor: '#0090FF' }}>G</Avatar>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                             <Avatar sx={{ bgcolor: '#FF8700' }}>L</Avatar>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                             <Avatar sx={{ bgcolor: '#00D2BE' }}>O</Avatar>
                         </Grid>
                     </Grid>
                 </Box>
             </Paper>
         </Container>
-    );
+);
 }
