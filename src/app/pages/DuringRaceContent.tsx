@@ -1,29 +1,26 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  Container,
-  Grid,
-  Typography,
+  Alert,
+  AlertTitle,
   Box,
-  CircularProgress,
-  useTheme,
-  Paper,
-  LinearProgress,
-  Chip,
-  Divider,
   Button,
+  Chip,
+  CircularProgress,
+  Container,
+  Divider,
+  LinearProgress,
   List,
   ListItem,
   ListItemText,
-  Alert,
-  AlertTitle
+  Paper,
+  Typography,
+  useTheme
 } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import FlagIcon from '@mui/icons-material/Flag';
-import TimerIcon from '@mui/icons-material/Timer';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import WarningIcon from '@mui/icons-material/Warning';
-import { PhaseCard } from '@/app/components/PhaseCard';
+import {PhaseCard} from '@/app/components/PhaseCard';
 
 interface Driver {
   driver_number: string;

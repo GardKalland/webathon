@@ -1,23 +1,14 @@
-// src/components/pages/ThreePhaseLanding.tsx
 'use client';
 
-import React, { useState, useRef } from 'react';
-import {
-    Box,
-    Container,
-    Grid,
-    Typography,
-    Button,
-    useTheme,
-    alpha,
-    IconButton
-} from '@mui/material';
+import React, {useRef, useState} from 'react';
+import {alpha, Box, Container, Grid, IconButton, Typography, useTheme} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FlagIcon from '@mui/icons-material/Flag';
 import SpeedIcon from '@mui/icons-material/Speed';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { PhaseCard } from '@/app/components/PhaseCard';
+import {PhaseCard} from '@/app/components/PhaseCard';
 import MapPageContent from "@/app/pages/MapPageContent";
+
 const ThreePhaseLanding = () => {
     const theme = useTheme();
     const [hoveredCard, setHoveredCard] = useState<number | null>(null);

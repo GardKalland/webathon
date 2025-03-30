@@ -1,28 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import {
-    Box,
-    Container,
-    Typography,
-    Button,
-    Card,
-    CardContent,
-    CardMedia,
-    useTheme,
-    alpha,
-    Divider,
-    Paper,
-    Chip,
-    CircularProgress
-} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Box, CircularProgress, Container, Divider, Paper, Typography, useTheme} from '@mui/material';
 import Grid from '@mui/material/Grid';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import UmbrellaIcon from '@mui/icons-material/Umbrella';
-import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
-import CloudIcon from '@mui/icons-material/Cloud';
 import ResultPageContent from './ResultPageContent';
 
 // Simple weather data for the race weekend

@@ -1,29 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-    Box,
-    Container,
-    Typography,
-    Button,
-    Card,
-    CardContent,
-    CardMedia,
-    useTheme,
-    alpha,
-    Divider,
-    Paper,
-    Chip
-} from '@mui/material';
+import React, {useState} from 'react';
+import {alpha, Box, Chip, Container, Divider, Paper, Typography, useTheme} from '@mui/material';
 import Grid from '@mui/material/Grid';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import FlagIcon from '@mui/icons-material/Flag';
 import ResultPageContent from './ResultPageContent';
 
 const AfterRaceContent = () => {
     const theme = useTheme();
-    const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
     // Chinese Grand Prix winners data
     const chineseGPWinners = {
@@ -124,7 +107,7 @@ const AfterRaceContent = () => {
 
                     <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
                         {chineseGPWinners.podium.map((driver) => (
-                            <Grid item xs={12} md={4} key={driver.position}>
+                            <Grid size={4} key={driver.position}>
                                 <Paper
                                     elevation={3}
                                     sx={{
