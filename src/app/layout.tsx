@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-    title: 'Your App Name',
-    description: 'Description for your application',
+    title: 'SMART F1',
+    description: 'ALL SMART INFO ABOUT F1',
 };
 
 export default function RootLayout({
