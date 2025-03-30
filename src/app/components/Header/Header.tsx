@@ -10,9 +10,9 @@ import {
     Slide
 } from '@mui/material';
 import { HeaderProps } from './Header.types';
-import { Logo } from '../../ui/Logo';
-import { Navigation } from '../../ui/Navigation';
-import { Button } from '@/app/ui/Button';
+import { Logo } from '../Logo';
+import { Navigation } from '../Naviagation';
+import { Button } from '@/app/components/Button';
 
 interface ElevationScrollProps {
     window?: () => Window;

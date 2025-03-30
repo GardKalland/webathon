@@ -12,7 +12,7 @@ export const Logo: FC<LogoProps> = ({
                                         ...props
                                     }) => {
     return (
-        <Link href="/" passHref style={{ textDecoration: 'none' }}>
+        <Link href="/public" passHref style={{ textDecoration: 'none' }}>
             <Box
                 component="img"
                 sx={{

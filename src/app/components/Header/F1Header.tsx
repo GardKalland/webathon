@@ -21,7 +21,7 @@ import {
     Link as MuiLink,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Typography } from '@/app/ui/Typography';
+import { Typography } from '@/app/components/Typography';
 import { HeaderProps } from './Header.types';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
