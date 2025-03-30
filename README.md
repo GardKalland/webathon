@@ -1,3 +1,25 @@
+# SMART F1
+
+Vi har laget SMART F1, din oversikt over F1.
+Her kan du se informasjon før, under og etter løpshelgen.
+Hvordan ser kartet ut, når er løpet og hvem leder årets sesong?
+Under løpet kan du se status på alle førerene live! 
+Hvilke plassering har din favorittfører, hvilket dekk har de og hvor mye leder de med?
+
+
+
+
+### Tech-Stack
+- React
+- TypeScript with MUI Material
+- Next.js
+- SQLite3
+
+
+
+
+
+
 # Webathon 2025
 
 Velkommen til Webkoms episke hackathon 2025!
