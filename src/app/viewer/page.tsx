@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import {
   Container,
@@ -17,13 +17,16 @@ import {
   ListItem,
   ListItemText,
   Alert,
-  AlertTitle
+  AlertTitle,
+  Fade,
+  Grow
 } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import FlagIcon from '@mui/icons-material/Flag';
 import TimerIcon from '@mui/icons-material/Timer';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import WarningIcon from '@mui/icons-material/Warning';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { PhaseCard } from '@/app/components/PhaseCard';
 
 interface Driver {
@@ -76,13 +79,59 @@ interface RaceData {
   incidents: RaceIncident[];
 }
 
+// Type for driver position change status
+type PositionChange = 'up' | 'down' | 'same';
+
 export default function RaceViewerPage() {
+  // Main state
   const [raceData, setRaceData] = useState<RaceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [autoAdvance, setAutoAdvance] = useState(false);
+
+  // Transition state
+  const [previousDrivers, setPreviousDrivers] = useState<Driver[]>([]);
+  const [positionChanges, setPositionChanges] = useState<Record<string, PositionChange>>({});
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   const theme = useTheme();
+  const autoAdvanceRef = useRef(autoAdvance);
+
+  // Fixed card height
+  const cardHeight = "420px"; // Adjust this value as needed
+
+  // Update the autoAdvanceRef when autoAdvance changes
+  useEffect(() => {
+    autoAdvanceRef.current = autoAdvance;
+  }, [autoAdvance]);
+
+  // Sort drivers by position
+  const getSortedDrivers = (drivers: Driver[]) => {
+    return [...drivers].sort((a, b) => a.position - b.position);
+  };
+
+  // Detect position changes between previous and current drivers
+  const detectPositionChanges = (prevDrivers: Driver[], newDrivers: Driver[]) => {
+    const changes: Record<string, PositionChange> = {};
+
+    newDrivers.forEach(driver => {
+      const prevDriver = prevDrivers.find(d => d.driver_number === driver.driver_number);
+      if (prevDriver) {
+        if (prevDriver.position > driver.position) {
+          changes[driver.driver_number] = 'up';
+        } else if (prevDriver.position < driver.position) {
+          changes[driver.driver_number] = 'down';
+        } else {
+          changes[driver.driver_number] = 'same';
+        }
+      } else {
+        changes[driver.driver_number] = 'same';
+      }
+    });
+
+    return changes;
+  };
 
   // Fetch race data from the API
   const fetchRaceData = async (advanceLaps = 1) => {
@@ -100,6 +149,23 @@ export default function RaceViewerPage() {
         throw new Error(data.error);
       }
 
+      // Store previous drivers and detect position changes
+      if (raceData) {
+        setPreviousDrivers(raceData.drivers);
+
+        // Calculate position changes
+        const changes = detectPositionChanges(raceData.drivers, data.drivers);
+        setPositionChanges(changes);
+
+        // Set transition flag to trigger animation
+        setIsTransitioning(true);
+
+        // Reset transition flag after animation duration
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 1000); // Match this with your CSS transition duration
+      }
+
       setRaceData(data);
       setLoading(false);
     } catch (err) {
@@ -113,6 +179,14 @@ export default function RaceViewerPage() {
   const resetRace = async () => {
     try {
       setLoading(true);
+      setPreviousDrivers([]);
+      setPositionChanges({});
+      setIsTransitioning(false);
+
+      if (autoAdvanceRef.current) {
+        setAutoAdvance(false);
+      }
+
       const response = await fetch('/api/simulation?reset=true');
 
       if (!response.ok) {
@@ -181,6 +255,41 @@ export default function RaceViewerPage() {
 
   // Get status indicator
   const getStatusIndicator = (driver: Driver) => {
+    // First, check for position changes
+    const posChange = positionChanges[driver.driver_number];
+    if (posChange === 'up') {
+      return (
+        <Grow in timeout={800}>
+          <Chip
+            size="small"
+            icon={<ArrowUpwardIcon fontSize="small" />}
+            label="UP"
+            sx={{
+              bgcolor: 'success.main',
+              color: 'white',
+              fontWeight: 'bold'
+            }}
+          />
+        </Grow>
+      );
+    } else if (posChange === 'down') {
+      return (
+        <Grow in timeout={800}>
+          <Chip
+            size="small"
+            icon={<ArrowDownwardIcon fontSize="small" />}
+            label="DOWN"
+            sx={{
+              bgcolor: 'error.main',
+              color: 'white',
+              fontWeight: 'bold'
+            }}
+          />
+        </Grow>
+      );
+    }
+
+    // Then check for race conditions
     if (driver.dnf) {
       return <Chip size="small" label="DNF" sx={{ bgcolor: 'error.main', color: 'white' }} />;
     }
@@ -229,6 +338,9 @@ export default function RaceViewerPage() {
     );
   }
 
+  // Sort drivers by position for display
+  const sortedDrivers = getSortedDrivers(raceData.drivers);
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Race Header */}
@@ -272,7 +384,7 @@ export default function RaceViewerPage() {
               <Button
                 variant="contained"
                 onClick={() => fetchRaceData(1)}
-                disabled={raceData.race_finished || loading}
+                disabled={raceData.race_finished || loading || isTransitioning}
                 startIcon={<KeyboardArrowRightIcon />}
               >
                 Next Lap
@@ -315,7 +427,7 @@ export default function RaceViewerPage() {
           {raceData.race_finished && (
             <Alert severity="success" sx={{ mb: 2 }}>
               <AlertTitle>Race Complete</AlertTitle>
-              The race has finished! {raceData.drivers[0]?.name} is the winner!
+              The race has finished! {sortedDrivers[0]?.name} is the winner!
             </Alert>
           )}
 
@@ -324,7 +436,7 @@ export default function RaceViewerPage() {
             Current Podium
           </Typography>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {raceData.drivers.slice(0, 3).map((driver, index) => (
+            {sortedDrivers.slice(0, 3).map((driver, index) => (
               <Chip
                 key={driver.driver_number}
                 avatar={
@@ -370,11 +482,12 @@ export default function RaceViewerPage() {
                 bgcolor: 'rgba(0,0,0,0.3)',
                 borderRadius: 1,
                 borderLeft: `4px solid ${incident.type === 'Safety Car' ? 'orange' :
-                    incident.type === 'Yellow Flag' ? 'yellow' :
-                      incident.type === 'Pit Stop' ? 'cyan' :
-                        incident.type === 'Fastest Lap' ? 'lime' :
-                          incident.type === 'Race Start' ? 'green' :
-                            incident.type === 'Race Finish' ? 'gold' :
+                  incident.type === 'Yellow Flag' ? 'yellow' :
+                    incident.type === 'Pit Stop' ? 'cyan' :
+                      incident.type === 'Fastest Lap' ? 'lime' :
+                        incident.type === 'Race Start' ? 'green' :
+                          incident.type === 'Race Finish' ? 'gold' :
+                            incident.type === 'Overtake' ? 'magenta' :
                               'white'
                   }`
               }}>
@@ -404,11 +517,26 @@ export default function RaceViewerPage() {
         </Paper>
       </Box>
 
-      {/* Driver Grid */}
-      <Grid container spacing={2}>
-        {raceData.drivers.map((driver) => {
-          // Generate driver card description with race information
-          const description = `Position: ${driver.position} (Q${driver.qualifying_position})
+      {/* Driver Grid with transitions */}
+      <Box sx={{ position: 'relative' }}>
+        <Box 
+          sx={{ 
+            display: 'grid',
+            gap: 2,
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+              lg: 'repeat(4, 1fr)'
+            },
+            '& > *': {
+              transition: `all 0.8s cubic-bezier(0.4, 0, 0.2, 1)`
+            }
+          }}
+        >
+          {sortedDrivers.map((driver) => {
+            // Generate driver card description with race information
+            const description = `Position: ${driver.position} (Q${driver.qualifying_position})
 Last Lap: ${driver.last_lap_time || 'N/A'}
 Best Lap: ${driver.best_lap_time || 'N/A'}
 Gap to Leader: ${driver.gap_to_leader}
@@ -419,58 +547,138 @@ Pit Stops: ${driver.pit_stops}
 Fuel: ${driver.fuel_load.toFixed(0)}%
 ${driver.dnf ? 'Status: DNF' : ''}`;
 
-          // Generate driver card title with position
-          const driverTitle = `P${driver.position} ${driver.name}`;
+            // Generate driver card title with position
+            const driverTitle = `P${driver.position} ${driver.name}`;
 
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={driver.driver_number}>
-              <Box sx={{ position: 'relative' }}>
-                {/* Status indicator */}
-                {getStatusIndicator(driver) && (
-                  <Box sx={{ position: 'absolute', top: -10, right: -10, zIndex: 10 }}>
-                    {getStatusIndicator(driver)}
-                  </Box>
-                )}
+            const posChange = positionChanges[driver.driver_number];
+            const bgColor = posChange === 'up'
+              ? 'rgba(46, 125, 50, 0.2)'
+              : posChange === 'down'
+                ? 'rgba(211, 47, 47, 0.2)'
+                : 'transparent';
 
-                {/* Tire compound indicator */}
+            // Calculate the number of positions moved
+            const prevDriver = previousDrivers.find(d => d.driver_number === driver.driver_number);
+            const positionsMoved = prevDriver ? prevDriver.position - driver.position : 0;
+
+            return (
+              <Fade
+                key={driver.driver_number}
+                in={true}
+                style={{
+                  transitionDuration: '0.8s',
+                  backgroundColor: bgColor,
+                  borderRadius: '8px',
+                }}
+              >
                 <Box sx={{
-                  position: 'absolute',
-                  bottom: 10,
-                  right: 10,
-                  zIndex: 10,
-                  width: 30,
-                  height: 30,
-                  borderRadius: '50%',
-                  bgcolor: getTireColor(driver.tire_compound),
-                  border: '2px solid white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '0.75rem',
-                  color: driver.tire_compound === 'Medium' ? 'black' : 'white'
+                  position: 'relative',
+                  height: cardHeight,
+                  transition: `all 0.8s cubic-bezier(0.4, 0, 0.2, 1)`,
+                  transform: isTransitioning ?
+                    (posChange === 'up' ? 'translateY(-20px) scale(1.03)' :
+                      posChange === 'down' ? 'translateY(20px) scale(0.97)' :
+                        'scale(1)') : 'scale(1)',
+                  opacity: isTransitioning ?
+                    (posChange === 'up' || posChange === 'down' ? 0.95 : 1) : 1,
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                    zIndex: 1
+                  }
                 }}>
-                  {driver.tire_compound.charAt(0)}
-                </Box>
+                  {/* Status indicator with enhanced transitions */}
+                  {getStatusIndicator(driver) && (
+                    <Box sx={{ 
+                      position: 'absolute', 
+                      top: -10, 
+                      right: -10, 
+                      zIndex: 10,
+                      transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transform: isTransitioning ?
+                        (posChange === 'up' ? 'scale(1.2) rotate(10deg)' :
+                          posChange === 'down' ? 'scale(0.8) rotate(-10deg)' :
+                            'scale(1) rotate(0deg)') : 'scale(1) rotate(0deg)'
+                    }}>
+                      {getStatusIndicator(driver)}
+                    </Box>
+                  )}
 
-                <PhaseCard
-                  id={parseInt(driver.driver_number)}
-                  title={driverTitle}
-                  subtitle={driver.team_name}
-                  description={description}
-                  icon={<DirectionsCarIcon />}
-                  color={getTeamColor(driver.team_name)}
-                  link={`/driver/${driver.driver_number}`}
-                  hoveredCard={hoveredCard}
-                  setHoveredCard={setHoveredCard}
-                  image={driver.image}
-                  compact={true}
-                />
-              </Box>
-            </Grid>
-          );
-        })}
-      </Grid>
+                  {/* Position number badge with enhanced transitions */}
+                  <Box sx={{
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                    zIndex: 10,
+                    width: 28,
+                    height: 28,
+                    borderRadius: '50%',
+                    bgcolor: 'black',
+                    border: `2px solid ${posChange === 'up' ? '#4caf50' : posChange === 'down' ? '#f44336' : 'white'}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '0.875rem',
+                    color: 'white',
+                    transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: isTransitioning ?
+                      (posChange === 'up' ? 'scale(1.2) rotate(10deg)' :
+                        posChange === 'down' ? 'scale(0.8) rotate(-10deg)' :
+                          'scale(1) rotate(0deg)') : 'scale(1) rotate(0deg)',
+                    boxShadow: isTransitioning ?
+                      (posChange === 'up' ? '0 4px 8px rgba(76, 175, 80, 0.3)' :
+                        posChange === 'down' ? '0 4px 8px rgba(244, 67, 54, 0.3)' :
+                          'none') : 'none'
+                  }}>
+                    {driver.position}
+                  </Box>
+
+                  {/* Tire compound indicator with enhanced transitions */}
+                  <Box sx={{
+                    position: 'absolute',
+                    bottom: 10,
+                    right: 10,
+                    zIndex: 10,
+                    width: 30,
+                    height: 30,
+                    borderRadius: '50%',
+                    bgcolor: getTireColor(driver.tire_compound),
+                    border: '2px solid white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '0.75rem',
+                    color: driver.tire_compound === 'Medium' ? 'black' : 'white',
+                    transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: isTransitioning ?
+                      (posChange === 'up' ? 'scale(1.1)' :
+                        posChange === 'down' ? 'scale(0.9)' :
+                          'scale(1)') : 'scale(1)'
+                  }}>
+                    {driver.tire_compound.charAt(0)}
+                  </Box>
+
+                  <PhaseCard
+                    id={parseInt(driver.driver_number)}
+                    title={driverTitle}
+                    subtitle={driver.team_name}
+                    description={description}
+                    icon={<DirectionsCarIcon />}
+                    color={getTeamColor(driver.team_name)}
+                    link={`/driver/${driver.driver_number}`}
+                    hoveredCard={hoveredCard}
+                    setHoveredCard={setHoveredCard}
+                    image={driver.image}
+                    compact={true}
+                    height={cardHeight}
+                  />
+                </Box>
+              </Fade>
+            );
+          })}
+        </Box>
+      </Box>
     </Container>
   );
 }
