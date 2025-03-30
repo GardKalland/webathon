@@ -90,47 +90,6 @@ const PreRaceContent = () => {
         fetchWeather();
     }, []);
 
-    const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-
-    // Data for pre-race content sections
-    const preRaceData = [
-        {
-            id: 1,
-            title: 'DRIVER LINEUPS',
-            description: 'Explore the latest driver lineups, team changes, and driver profiles for Suzuka.',
-            image: '/pre-race-imgs/driver_lineups.jpg',
-            icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
-            color: theme.palette.primary.main,
-            link: '#'
-        },
-        {
-            id: 2,
-            title: 'TRACK ANALYSIS',
-            description: 'Get insights into the Suzuka Circuit layout, weather conditions, and team strategies.',
-            image: '/pre-race-imgs/track_analysis.jpg',
-            icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
-            color: '#0090D0',
-            link: '#'
-        },
-        {
-            id: 3,
-            title: 'QUALIFYING RESULTS',
-            description: 'Stay updated with the latest qualifying results and grid positions for the Japan GP.',
-            image: '/pre-race-imgs/qualifying_results.jpg',
-            icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
-            color: '#F596C8',
-            link: '#'
-        },
-        {
-            id: 4,
-            title: 'PREVIOUS RACE RECAP',
-            description: 'Look back at the results and highlights from the Chinese Grand Prix in Shanghai.',
-            image: '/pre-race-imgs/expert_predictions.jpg',
-            icon: <EmojiEventsIcon sx={{ fontSize: 40 }} />,
-            color: '#E10600',
-            link: '/race-after'
-        }
-    ];
 
     return (
         <Box
